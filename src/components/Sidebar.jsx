@@ -17,7 +17,6 @@ function Sidebar() {
 
   return (
     <aside className="sidebar">
-      <div className="sidebar-logo">OT</div>
       <nav className="sidebar-nav">
         {menuItems.map((item, index) => (
           <motion.div
