@@ -2,118 +2,313 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 
 function KPIWidget() {
-  const [displayValue, setDisplayValue] = useState('70,32%')
   const chartRef = useRef(null)
 
-  useEffect(() => {
-    // Animate the KPI value counter
-    const obj = { value: 0 }
-    gsap.to(obj, {
-      value: 70.32,
-      duration: 2,
-      ease: 'power2.out',
-      delay: 0.5,
-      onUpdate: () => {
-        setDisplayValue(obj.value.toFixed(2).replace('.', ',') + '%')
-      }
-    })
-
-    // Animate line chart
-    if (chartRef.current) {
-      const path = chartRef.current.querySelector('.kpi-line')
-      if (path) {
-        const length = path.getTotalLength()
-        gsap.fromTo(path,
-          { strokeDasharray: length, strokeDashoffset: length },
-          {
-            strokeDashoffset: 0,
-            duration: 2,
-            ease: 'power2.inOut',
-            delay: 0.8
-          }
-        )
-      }
-    }
-  }, [])
-
-  // KPI trend data for Jul-Dec (matching the image pattern)
-  const kpiData = [
-    { month: 'Jul', value: 65 },
-    { month: 'Aug', value: 72 },
-    { month: 'Sep', value: 68 },
-    { month: 'Oct', value: 78 },
-    { month: 'Nov', value: 72 },
-    { month: 'Dec', value: 75 }
+  // Inflation data from Jan 2024 (I) to Oct 2025 (X)
+  const inflationData = [
+    // 2024
+    { month: 'I', year: '2024', domestic: 4.2, imported: 2.1, solidFuel: 0.5, gasoline: 0.15, max: 0.05, total: 7.0 },
+    { month: 'II', year: '2024', domestic: 3.8, imported: 1.8, solidFuel: 0.4, gasoline: 0.1, max: 0.05, total: 6.15 },
+    { month: 'III', year: '2024', domestic: 3.5, imported: 1.6, solidFuel: 0.35, gasoline: 0.08, max: 0.02, total: 5.55 },
+    { month: 'IV', year: '2024', domestic: 3.2, imported: 1.4, solidFuel: 0.3, gasoline: 0.08, max: 0.02, total: 5.0 },
+    { month: 'V', year: '2024', domestic: 3.0, imported: 1.3, solidFuel: 0.25, gasoline: 0.07, max: 0.02, total: 4.64 },
+    { month: 'VI', year: '2024', domestic: 2.7, imported: 1.1, solidFuel: 0.2, gasoline: 0.06, max: 0.01, total: 4.07 },
+    { month: 'VII', year: '2024', domestic: 2.9, imported: 1.2, solidFuel: 0.3, gasoline: 0.07, max: 0.01, total: 4.48 },
+    { month: 'VIII', year: '2024', domestic: 3.1, imported: 1.3, solidFuel: 0.4, gasoline: 0.08, max: 0.01, total: 4.89 },
+    { month: 'IX', year: '2024', domestic: 3.5, imported: 1.5, solidFuel: 0.5, gasoline: 0.09, max: 0.01, total: 5.6 },
+    { month: 'X', year: '2024', domestic: 4.0, imported: 1.7, solidFuel: 0.6, gasoline: 0.1, max: 0.01, total: 6.41 },
+    { month: 'XI', year: '2024', domestic: 4.5, imported: 1.8, solidFuel: 0.7, gasoline: 0.11, max: 0.01, total: 7.12 },
+    { month: 'XII', year: '2024', domestic: 5.0, imported: 2.0, solidFuel: 0.8, gasoline: 0.12, max: 0.02, total: 7.94 },
+    // 2025
+    { month: 'I', year: '2025', domestic: 5.5, imported: 2.2, solidFuel: 0.9, gasoline: 0.13, max: 0.02, total: 8.75 },
+    { month: 'II', year: '2025', domestic: 6.0, imported: 2.4, solidFuel: 1.0, gasoline: 0.14, max: 0.02, total: 9.56 },
+    { month: 'III', year: '2025', domestic: 6.2, imported: 2.5, solidFuel: 1.1, gasoline: 0.14, max: 0.02, total: 9.96 },
+    { month: 'IV', year: '2025', domestic: 6.3, imported: 2.4, solidFuel: 1.0, gasoline: 0.13, max: 0.02, total: 9.85 },
+    { month: 'V', year: '2025', domestic: 6.4, imported: 2.3, solidFuel: 0.95, gasoline: 0.13, max: 0.02, total: 9.8 },
+    { month: 'VI', year: '2025', domestic: 6.4, imported: 2.2, solidFuel: 0.9, gasoline: 0.12, max: 0.02, total: 9.64 },
+    { month: 'VII', year: '2025', domestic: 6.5, imported: 2.0, solidFuel: 0.85, gasoline: 0.11, max: 0.02, total: 9.48 },
+    { month: 'VIII', year: '2025', domestic: 6.5, imported: 1.9, solidFuel: 0.8, gasoline: 0.1, max: 0.01, total: 9.31 },
+    { month: 'IX', year: '2025', domestic: 6.5, imported: 1.85, solidFuel: 0.75, gasoline: 0.1, max: 0.01, total: 9.21 },
+    { month: 'X', year: '2025', domestic: 6.5, imported: 1.8, solidFuel: 1.5, gasoline: 0.1, max: 0.01, total: 9.91 }
   ]
 
-  const chartWidth = 200
-  const chartHeight = 80
-  const maxValue = 100
-  const minValue = 50
+  useEffect(() => {
+    if (!chartRef.current) return
 
-  const scaleX = (index) => (index / (kpiData.length - 1)) * chartWidth
-  const scaleY = (value) => chartHeight - ((value - minValue) / (maxValue - minValue)) * chartHeight
+    // Animate stacked bars
+    const bars = chartRef.current.querySelectorAll('.stacked-bar-segment')
+    gsap.fromTo(bars,
+      { scaleY: 0, opacity: 0 },
+      {
+        scaleY: 1,
+        opacity: 1,
+        transformOrigin: 'bottom',
+        duration: 0.6,
+        stagger: {
+          amount: 1.5,
+          from: 'start'
+        },
+        ease: 'power2.out',
+        delay: 0.3
+      }
+    )
 
-  const linePath = kpiData.map((d, i) => {
-    const x = scaleX(i)
-    const y = scaleY(d.value)
-    return `${i === 0 ? 'M' : 'L'} ${x} ${y}`
-  }).join(' ')
+    // Animate inflation line
+    const line = chartRef.current.querySelector('.inflation-line')
+    if (line) {
+      const length = line.getTotalLength()
+      gsap.fromTo(line,
+        { strokeDasharray: length, strokeDashoffset: length },
+        {
+          strokeDashoffset: 0,
+          duration: 2.5,
+          ease: 'power2.inOut',
+          delay: 0.8
+        }
+      )
+    }
 
-  const areaPath = linePath + ` L ${chartWidth} ${chartHeight} L 0 ${chartHeight} Z`
+    // Animate value labels
+    const labels = chartRef.current.querySelectorAll('.inflation-value-label')
+    gsap.fromTo(labels,
+      { opacity: 0, y: -10 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.5,
+        stagger: 0.05,
+        delay: 1.5
+      }
+    )
+  }, [])
+
+  const chartWidth = 900
+  const chartHeight = 250
+  const padding = { top: 40, right: 50, bottom: 50, left: 60 }
+  const graphWidth = chartWidth - padding.left - padding.right
+  const graphHeight = chartHeight - padding.top - padding.bottom
+
+  const yMin = -1.0
+  const yMax = 11.0
+  const yRange = yMax - yMin
+
+  const scaleX = (index) => {
+    return padding.left + (index / (inflationData.length - 1)) * graphWidth
+  }
+
+  const scaleY = (value) => {
+    return padding.top + graphHeight - ((value - yMin) / yRange) * graphHeight
+  }
+
+  const barWidth = graphWidth / inflationData.length * 0.7
+
+  // Colors matching the chart
+  const colors = {
+    max: '#e8f4f8',
+    gasoline: '#b3d9e6',
+    solidFuel: '#5fa8d3',
+    imported: '#2980b9',
+    domestic: '#1a4d80',
+    inflation: '#e74c3c'
+  }
 
   return (
-    <div className="widget kpi-widget">
+    <div className="widget kpi-widget inflation-widget">
       <div className="widget-header">
-        <span className="widget-title">Average Team KPI</span>
-        <span className="widget-icon">📊</span>
-        <span className="widget-expand">↗</span>
+        <span className="widget-title">
+          УЛААНБААТАР ХОТЫН ЖИЛИЙН ИНФЛЯЦЫН БҮРЭЛДЭХҮҮН, сараар
+        </span>
       </div>
-      <div className="kpi-content">
-        <div className="kpi-value-container">
-          <span className="kpi-value">{displayValue}</span>
-          <span className="kpi-icon-small">📈</span>
-        </div>
-      </div>
-      <div className="kpi-chart" ref={chartRef}>
-        <svg width="100%" height="80" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="kpiGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" stopColor="#f5d98a" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#f5d98a" stopOpacity="0" />
-            </linearGradient>
-          </defs>
-          {/* Area fill */}
-          <path
-            d={areaPath}
-            fill="url(#kpiGradient)"
-            opacity="0.3"
-          />
-          {/* Line */}
-          <path
-            className="kpi-line"
-            d={linePath}
+      
+      <div className="inflation-chart-container" ref={chartRef}>
+        <svg width="100%" height="280" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="xMidYMid meet">
+          {/* Y-axis labels */}
+          <g className="y-axis">
+            {[-1, 3, 7, 11].map((value) => (
+              <g key={value}>
+                <line
+                  x1={padding.left}
+                  y1={scaleY(value)}
+                  x2={chartWidth - padding.right}
+                  y2={scaleY(value)}
+                  stroke="rgba(0, 0, 0, 0.1)"
+                  strokeWidth="1"
+                  strokeDasharray={value === -1 ? '0' : '4 4'}
+                />
+                <text
+                  x={padding.left - 10}
+                  y={scaleY(value) + 4}
+                  fill="var(--text-secondary)"
+                  fontSize="11"
+                  textAnchor="end"
+                >
+                  {value.toFixed(1)}
+                </text>
+              </g>
+            ))}
+            <text
+              x={15}
+              y={chartHeight / 2}
+              fill="var(--text-secondary)"
+              fontSize="11"
+              textAnchor="middle"
+              transform={`rotate(-90, 15, ${chartHeight / 2})`}
+            >
+              нэгж хувь
+            </text>
+          </g>
+
+          {/* Stacked bars */}
+          {inflationData.map((data, i) => {
+            const x = scaleX(i) - barWidth / 2
+            const baselineY = scaleY(0)
+            
+            // Stack from bottom (baseline) upward
+            const segments = [
+              { value: data.domestic, color: colors.domestic, label: 'Дотоодын бараа' },
+              { value: data.imported, color: colors.imported, label: 'Импортын бараа' },
+              { value: data.solidFuel, color: colors.solidFuel, label: 'Хатуу түлш' },
+              { value: data.gasoline, color: colors.gasoline, label: 'Бензин түлш' },
+              { value: data.max, color: colors.max, label: 'Max' }
+            ]
+
+            let accumulatedY = baselineY
+
+            return (
+              <g key={i} className="stacked-bar-group">
+                {segments.map((segment, segIdx) => {
+                  if (segment.value <= 0) return null
+                  
+                  const height = Math.abs(scaleY(0) - scaleY(segment.value))
+                  const y = accumulatedY - height
+                  
+                  accumulatedY = y
+                  
+                  return (
+                    <rect
+                      key={segIdx}
+                      className="stacked-bar-segment"
+                      x={x}
+                      y={y}
+                      width={barWidth}
+                      height={height}
+                      fill={segment.color}
+                      stroke="rgba(255, 255, 255, 0.1)"
+                      strokeWidth="0.5"
+                    />
+                  )
+                })}
+              </g>
+            )
+          })}
+
+          {/* Inflation line */}
+          <polyline
+            className="inflation-line"
+            points={inflationData.map((data, i) => {
+              const x = scaleX(i)
+              const y = scaleY(data.total)
+              return `${x},${y}`
+            }).join(' ')}
             fill="none"
-            stroke="#f5d98a"
+            stroke={colors.inflation}
             strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
           />
-          {/* Dashed target line */}
-          <line
-            x1="0"
-            y1={scaleY(70)}
-            x2={chartWidth}
-            y2={scaleY(70)}
-            stroke="rgba(0, 0, 0, 0.1)"
-            strokeWidth="1"
-            strokeDasharray="4 4"
-          />
+
+          {/* Value labels on line */}
+          {inflationData.filter((_, i) => i === 9 || i === 20).map((data, idx) => {
+            const i = idx === 0 ? 9 : 20
+            const x = scaleX(i)
+            const y = scaleY(data.total)
+            
+            return (
+              <g key={i} className="inflation-value-label">
+                <circle
+                  cx={x}
+                  cy={y}
+                  r="4"
+                  fill={colors.inflation}
+                />
+                <text
+                  x={x}
+                  y={y - 10}
+                  fill={colors.inflation}
+                  fontSize="11"
+                  fontWeight="600"
+                  textAnchor="middle"
+                >
+                  {data.total.toFixed(1)}%
+                </text>
+              </g>
+            )
+          })}
+
+          {/* X-axis labels */}
+          <g className="x-axis">
+            {inflationData.map((data, i) => {
+              const x = scaleX(i)
+              const isYearStart = (i === 0 || (i > 0 && inflationData[i - 1].year !== data.year))
+              
+              return (
+                <g key={i}>
+                  <text
+                    x={x}
+                    y={chartHeight - padding.bottom + 20}
+                    fill="var(--text-secondary)"
+                    fontSize="10"
+                    textAnchor="middle"
+                  >
+                    {data.month}
+                  </text>
+                  {isYearStart && (
+                    <text
+                      x={x}
+                      y={chartHeight - padding.bottom + 35}
+                      fill="var(--text-secondary)"
+                      fontSize="11"
+                      fontWeight="600"
+                      textAnchor="middle"
+                    >
+                      {data.year}
+                    </text>
+                  )}
+                </g>
+              )
+            })}
+          </g>
         </svg>
-        <div className="kpi-months">
-          {kpiData.map((d, i) => (
-            <span key={i}>{d.month}</span>
-          ))}
+      </div>
+
+      {/* Legend */}
+      <div className="inflation-legend">
+        <div className="legend-title">Бүрэлдэхүүн:</div>
+        <div className="legend-items">
+          <div className="legend-item">
+            <div className="legend-color" style={{ background: colors.domestic }}></div>
+            <span>Дотоодын бараа</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color" style={{ background: colors.imported }}></div>
+            <span>Импортын бараа</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color" style={{ background: colors.solidFuel }}></div>
+            <span>Хатуу түлш</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color" style={{ background: colors.gasoline }}></div>
+            <span>Бензин түлш</span>
+          </div>
+          <div className="legend-item">
+            <div className="legend-color" style={{ background: colors.max }}></div>
+            <span>Max</span>
+          </div>
+        </div>
+        <div className="legend-line">
+          <div className="legend-line-color" style={{ background: colors.inflation }}></div>
+          <span>Инфляц</span>
         </div>
       </div>
     </div>
