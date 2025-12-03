@@ -109,28 +109,177 @@ body {
   padding: 0;
 }
 
-/* Header */
-.header {
-  background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
-  padding: 20px 30px;
+/* Expandable Banner */
+.expandable-banner {
+  height: 80px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin: 0;
 }
 
-.header-banner {
-  background: linear-gradient(135deg, var(--primary-green) 0%, #145a2c 100%);
-  padding: 15px 25px;
-  border-radius: var(--radius);
+.banner-bg-collapsed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  z-index: 1;
+}
+
+.banner-bg-expanded {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%),
+    url('https://images.unsplash.com/photo-1519501025264-65ba15a82390?w=1920&q=80') center/cover;
+  z-index: 0;
+  opacity: 0.9;
+}
+
+.expandable-banner.expanded .banner-bg-expanded {
+  z-index: 1;
+}
+
+.banner-motorcycle {
+  position: absolute;
+  left: 5%;
+  bottom: 0;
+  width: 300px;
+  height: 100%;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 100"><defs><linearGradient id="glow" x1="0%25" y1="0%25" x2="100%25" y2="0%25"><stop offset="0%25" style="stop-color:%23ff4500;stop-opacity:1" /><stop offset="100%25" style="stop-color:%23ff8c00;stop-opacity:0.5" /></linearGradient></defs><ellipse cx="40" cy="70" rx="25" ry="25" fill="none" stroke="%23ff4500" stroke-width="4"/><ellipse cx="160" cy="70" rx="25" ry="25" fill="none" stroke="%23ff4500" stroke-width="4"/><path d="M40 70 Q70 30 100 40 Q130 50 160 70" fill="none" stroke="%23333" stroke-width="8"/><circle cx="40" cy="70" r="12" fill="%23ff4500" opacity="0.8"/><circle cx="160" cy="70" r="12" fill="%23ff4500" opacity="0.8"/><ellipse cx="85" cy="45" rx="15" ry="20" fill="%23222"/><circle cx="85" cy="35" rx="8" fill="%23111" stroke="%23ff4500" stroke-width="1"/></svg>') no-repeat center bottom;
+  background-size: contain;
+  z-index: 5;
+  filter: drop-shadow(0 0 20px rgba(255, 69, 0, 0.6));
+  transition: all 0.5s ease;
+}
+
+.expandable-banner.expanded .banner-motorcycle {
+  width: 450px;
+  left: 10%;
+}
+
+.motorcycle-glow {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 60px;
+  background: radial-gradient(ellipse, rgba(255, 69, 0, 0.4) 0%, transparent 70%);
+  filter: blur(10px);
+}
+
+.light-trail {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 60%;
+  height: 8px;
+  background: linear-gradient(90deg, 
+    rgba(255, 140, 0, 0) 0%,
+    rgba(255, 140, 0, 0.8) 20%,
+    rgba(255, 69, 0, 1) 50%,
+    rgba(255, 255, 255, 1) 100%
+  );
+  filter: blur(2px);
+  z-index: 4;
+  box-shadow: 
+    0 0 20px rgba(255, 69, 0, 0.8),
+    0 0 40px rgba(255, 140, 0, 0.5),
+    0 0 60px rgba(255, 69, 0, 0.3);
+}
+
+.expandable-banner.expanded .light-trail {
+  top: 70%;
+  height: 12px;
+  filter: blur(3px);
+}
+
+.banner-text-before {
+  position: absolute;
+  right: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
   color: white;
-  font-size: 14px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: 700;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.5);
+  letter-spacing: 1px;
 }
 
-.banner-text {
-  font-weight: 500;
+.banner-text-after {
+  position: absolute;
+  right: 50px;
+  bottom: 80px;
+  z-index: 10;
+  color: white;
+  font-size: 32px;
+  font-weight: 700;
+  text-shadow: 0 2px 30px rgba(0,0,0,0.7);
+  letter-spacing: 2px;
+  opacity: 0;
+}
+
+.banner-expanded-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.banner-click-hint {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+  z-index: 10;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* City buildings silhouette for expanded state */
+.expandable-banner.expanded::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  z-index: 3;
+}
+
+/* Neon reflections */
+.expandable-banner::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to top, 
+    rgba(255, 69, 0, 0.3) 0%, 
+    transparent 100%
+  );
+  z-index: 2;
+}
+
+.expandable-banner.expanded::after {
+  height: 100px;
 }
 
 /* Dashboard Grid */
