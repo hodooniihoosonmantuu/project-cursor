@@ -933,7 +933,6 @@ body {
   margin-top: 10px;
 }
 
-/* Quick Links */
 /* Departments Widget - Slider Style */
 .departments-widget {
   position: relative;
@@ -1063,7 +1062,7 @@ body {
   border-radius: 0;
   display: inline-block;
   margin-left: 0; /* Start from icon's left edge */
-  width: calc(100% - 0px); /* Full width minus icon space if needed */
+  width: calc(100% - 0px);
 }
 
 /* Navigation indicators */

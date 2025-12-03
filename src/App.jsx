@@ -101,12 +101,10 @@ function App() {
               <NewsSection title="Алтны тойм мэдээ" variant="gold" />
             </div>
             <div className="center-column">
+              <DepartmentsWidget />
               <NewsSection title="Аюулгүй ажиллагааны сэрэмжлүүлэг" variant="safety" />
             </div>
           </div>
-
-          {/* Departments Row */}
-          <DepartmentsWidget />
 
           {/* Applications & Weather Row */}
           <div className="apps-weather-row">
