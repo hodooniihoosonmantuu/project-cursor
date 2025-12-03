@@ -1,18 +1,19 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import miningIcon from '../icons/mining-icon.png'
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState(0)
 
   const menuItems = [
-    { icon: '🏠', label: 'Accueil' },
-    { icon: '🌲', label: 'Le Parc' },
-    { icon: '📰', label: 'Actualités' },
-    { icon: '📁', label: 'Documents' },
-    { icon: '📊', label: 'Rapports' },
-    { icon: '📋', label: 'Projets' },
-    { icon: '👥', label: 'Équipe' },
-    { icon: '⚙️', label: 'Paramètres' }
+    { label: 'Accueil' },
+    { label: 'Le Parc' },
+    { label: 'Actualités' },
+    { label: 'Documents' },
+    { label: 'Rapports' },
+    { label: 'Projets' },
+    { label: 'Équipe' },
+    { label: 'Paramètres' }
   ]
 
   return (
@@ -39,7 +40,7 @@ function Sidebar() {
                 }}
               />
             )}
-            <span className="sidebar-icon">{item.icon}</span>
+            <img src={miningIcon} alt={item.label} className="sidebar-icon" />
             <span className="sidebar-label">{item.label}</span>
           </motion.div>
         ))}
