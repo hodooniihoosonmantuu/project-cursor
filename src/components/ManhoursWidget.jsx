@@ -3,55 +3,8 @@ import gsap from 'gsap'
 
 function ManhoursWidget() {
   const widgetRef = useRef(null)
-  const [frameIndex, setFrameIndex] = useState(0)
-
-  // Walking man ASCII art frames
-  const walkingFrames = [
-    `    .001.^
-    u$ON=1
-    Z00BAI
-    1..=~.
-    ;s<'''
-    NRX~=-
-    z0c^<X^
-    "B0s~^
-    @@$H~'
-    n$0=XN;.
-    ¡BBB0vU1=~'
-    $000cRr"vul
-    FAHZuqr-'
-    ZZUFA@FI.
-    ;BRHv n$U^-
-    ARN1  @si
-    'Onv~ 01.'
-    c0qr  rs.
-    aUU   ul
-    RO-   :.
-    nn~   -=.
-    =1^   ..`,
-    `    .001.^
-    u$ON=1
-    Z00BAI
-    1..=~.
-    ;s<'''
-    NRX~=-
-    z0c^<X^
-    "B0s~^
-    @@$H~'
-    n$0=XN;.
-    ¡BBB0vU1=~'
-    $000cRr"vul
-    FAHZuqr-'
-    ZZUFA@FI.
-    ;BRHv n$U^-
-      ARN1  @si
-      'Onv~ 01.'
-      c0qr  rs.
-      aUU   ul
-      RO-   :.
-      nn~   -=.
-      =1^   ..`
-  ]
+  const particlesRef = useRef(null)
+  const [particles, setParticles] = useState([])
 
   useEffect(() => {
     if (widgetRef.current) {
@@ -67,66 +20,64 @@ function ManhoursWidget() {
       )
     }
 
-    // Animate walking man
-    const walkInterval = setInterval(() => {
-      setFrameIndex((prev) => (prev + 1) % walkingFrames.length)
-    }, 500)
+    // Create particles
+    const createParticles = () => {
+      const newParticles = []
+      for (let i = 0; i < 30; i++) {
+        newParticles.push({
+          id: i,
+          x: Math.random() * 100,
+          y: Math.random() * 100,
+          size: Math.random() * 4 + 2,
+          duration: Math.random() * 3 + 2,
+          delay: Math.random() * 2,
+          color: ['#FFD700', '#2ecc71', '#4a90e2', '#FFCC2E'][Math.floor(Math.random() * 4)]
+        })
+      }
+      setParticles(newParticles)
+    }
 
-    return () => clearInterval(walkInterval)
-  }, [])
+    createParticles()
 
-  // Walking man ASCII art frames
-  const walkingFrames = [
-    `    .001.^
-    u$ON=1
-    Z00BAI
-    1..=~.
-    ;s<'''
-    NRX~=-
-    z0c^<X^
-    "B0s~^
-    @@$H~'
-    n$0=XN;.
-    ¡BBB0vU1=~'
-    $000cRr"vul
-    FAHZuqr-'
-    ZZUFA@FI.
-    ;BRHv n$U^-
-    ARN1  @si
-    'Onv~ 01.'
-    c0qr  rs.
-    aUU   ul
-    RO-   :.
-    nn~   -=.
-    =1^   ..`,
-    `    .001.^
-    u$ON=1
-    Z00BAI
-    1..=~.
-    ;s<'''
-    NRX~=-
-    z0c^<X^
-    "B0s~^
-    @@$H~'
-    n$0=XN;.
-    ¡BBB0vU1=~'
-    $000cRr"vul
-    FAHZuqr-'
-    ZZUFA@FI.
-    ;BRHv n$U^-
-      ARN1  @si
-      'Onv~ 01.'
-      c0qr  rs.
-      aUU   ul
-      RO-   :.
-      nn~   -=.
-      =1^   ..`
-  ]
+    // Animate particles
+    if (particlesRef.current) {
+      const particleElements = particlesRef.current.querySelectorAll('.particle')
+      particleElements.forEach((particle, i) => {
+        const p = particles[i]
+        if (p) {
+          gsap.to(particle, {
+            y: `+=${Math.random() * 100 + 50}`,
+            x: `+=${(Math.random() - 0.5) * 50}`,
+            opacity: 0,
+            scale: 0,
+            duration: p.duration,
+            delay: p.delay,
+            ease: 'power1.out',
+            repeat: -1,
+            yoyo: false
+          })
+        }
+      })
+    }
+  }, [particles])
 
   return (
     <div className="widget manhours-widget-card" ref={widgetRef}>
-      <div className="manhours-ascii-bg">
-        <pre className="walking-man">{walkingFrames[frameIndex]}</pre>
+      <div className="particles-container" ref={particlesRef}>
+        {particles.map((particle) => (
+          <div
+            key={particle.id}
+            className="particle"
+            style={{
+              left: `${particle.x}%`,
+              top: `${particle.y}%`,
+              width: `${particle.size}px`,
+              height: `${particle.size}px`,
+              background: particle.color,
+              boxShadow: `0 0 ${particle.size * 2}px ${particle.color}`
+            }}
+          />
+        ))}
       </div>
       <div className="manhours-indicator">●</div>
       <div className="manhours-title">MANHOURS</div>
@@ -137,4 +88,3 @@ function ManhoursWidget() {
 }
 
 export default ManhoursWidget
-
