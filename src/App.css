@@ -962,12 +962,11 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   display: flex;
-  align-items: flex-start;
-  gap: 15px;
+  flex-direction: column;
   position: relative;
   overflow: hidden;
   min-height: 120px;
-  flex-direction: column;
+  justify-content: space-between;
 }
 
 .department-item::before {
@@ -1040,9 +1039,9 @@ body {
 
 .department-desc-wrapper {
   display: flex;
-  align-items: center;
-  margin-top: 12px;
+  align-items: flex-end;
   width: 100%;
+  margin-top: auto;
 }
 
 .department-desc {
@@ -1054,7 +1053,8 @@ body {
   background: rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   display: inline-block;
-  margin-left: 65px; /* Align with icon box (50px + 15px gap) */
+  margin-left: 0; /* Start from icon's left edge */
+  width: calc(100% - 0px); /* Full width minus icon space if needed */
 }
 
 /* Navigation indicators */
