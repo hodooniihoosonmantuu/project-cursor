@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import miningIcon from '../icons/mining-icon.png'
+import miningIcon from '../icons/mining.png'
 
 function Sidebar() {
   const [activeItem, setActiveItem] = useState(0)
