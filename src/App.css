@@ -500,12 +500,32 @@ body {
 
 .kpi-widget.inflation-widget {
   grid-column: span 2;
-  background: #fefce8;
+  background: #0a0a0a;
+  color: white;
 }
 
 .kpi-widget.inflation-widget .widget-header,
 .kpi-widget.inflation-widget .inflation-legend {
   background: transparent;
+}
+
+.kpi-widget.inflation-widget .widget-title {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.kpi-widget.inflation-widget .y-axis text,
+.kpi-widget.inflation-widget .x-axis text {
+  fill: rgba(255, 255, 255, 0.6);
+}
+
+.kpi-widget.inflation-widget .inflation-legend {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.kpi-widget.inflation-widget .legend-title,
+.kpi-widget.inflation-widget .legend-item span,
+.kpi-widget.inflation-widget .legend-line span {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .kpi-widget .widget-header {

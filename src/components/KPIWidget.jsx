@@ -102,13 +102,13 @@ function KPIWidget() {
 
   const barWidth = graphWidth / inflationData.length * 0.7
 
-  // Colors matching the chart
+  // Colors - dull yellow tones for contrast
   const colors = {
-    max: '#e8f4f8',
-    gasoline: '#b3d9e6',
-    solidFuel: '#5fa8d3',
-    imported: '#2980b9',
-    domestic: '#1a4d80',
+    max: '#f5e6d3',
+    gasoline: '#e8d4b8',
+    solidFuel: '#d4b896',
+    imported: '#c19a73',
+    domestic: '#a87d50',
     inflation: '#e74c3c'
   }
 
@@ -131,14 +131,14 @@ function KPIWidget() {
                   y1={scaleY(value)}
                   x2={chartWidth - padding.right}
                   y2={scaleY(value)}
-                  stroke="rgba(0, 0, 0, 0.08)"
+                  stroke="rgba(255, 255, 255, 0.1)"
                   strokeWidth="1"
                   strokeDasharray={value === -1 ? '0' : '4 4'}
                 />
                 <text
                   x={padding.left - 10}
                   y={scaleY(value) + 4}
-                  fill="var(--text-secondary)"
+                  fill="rgba(255, 255, 255, 0.6)"
                   fontSize="11"
                   textAnchor="end"
                 >
@@ -149,7 +149,7 @@ function KPIWidget() {
             <text
               x={15}
               y={chartHeight / 2}
-              fill="var(--text-secondary)"
+              fill="rgba(255, 255, 255, 0.6)"
               fontSize="11"
               textAnchor="middle"
               transform={`rotate(-90, 15, ${chartHeight / 2})`}
@@ -172,17 +172,22 @@ function KPIWidget() {
               { value: data.max, color: colors.max, label: 'Max' }
             ]
 
-            let accumulatedY = baselineY
-
+            // Calculate cumulative values for proper stacking from bottom to top
+            let cumulativeValue = 0 // Cumulative value from bottom
+            
             return (
               <g key={i} className="stacked-bar-group">
                 {segments.map((segment, segIdx) => {
                   if (segment.value <= 0) return null
                   
-                  const height = Math.abs(scaleY(0) - scaleY(segment.value))
-                  const y = accumulatedY - height
+                  // Calculate bottom and top y-coordinates for this segment
+                  const bottomY = scaleY(cumulativeValue)
+                  cumulativeValue += segment.value
+                  const topY = scaleY(cumulativeValue)
                   
-                  accumulatedY = y
+                  // Height is the difference (top is higher in chart, but lower y-value in SVG)
+                  const segmentHeight = bottomY - topY
+                  const y = topY // Top of segment (smaller y-value)
                   
                   return (
                     <rect
@@ -191,9 +196,9 @@ function KPIWidget() {
                       x={x}
                       y={y}
                       width={barWidth}
-                      height={height}
+                      height={segmentHeight}
                       fill={segment.color}
-                      stroke="rgba(255, 255, 255, 0.2)"
+                      stroke="rgba(255, 255, 255, 0.15)"
                       strokeWidth="0.5"
                     />
                   )
@@ -273,7 +278,7 @@ function KPIWidget() {
                   <text
                     x={x}
                     y={chartHeight - padding.bottom + 20}
-                    fill="var(--text-secondary)"
+                    fill="rgba(255, 255, 255, 0.6)"
                     fontSize="10"
                     textAnchor="middle"
                   >
@@ -283,7 +288,7 @@ function KPIWidget() {
                     <text
                       x={x}
                       y={chartHeight - padding.bottom + 35}
-                      fill="var(--text-secondary)"
+                      fill="rgba(255, 255, 255, 0.7)"
                       fontSize="11"
                       fontWeight="600"
                       textAnchor="middle"
