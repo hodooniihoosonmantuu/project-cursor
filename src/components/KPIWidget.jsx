@@ -109,7 +109,7 @@ function KPIWidget() {
     solidFuel: '#FFB300',     // Bright yellow-orange
     imported: '#FFA000',      // Bright orange-yellow
     domestic: '#FF8F00',     // Bright deep yellow (top)
-    inflation: '#e74c3c'      // Red line
+    inflation: '#00E5FF'      // Bright cyan/teal - stands out on dark background
   }
 
   return (
