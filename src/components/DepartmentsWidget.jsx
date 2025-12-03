@@ -88,10 +88,14 @@ function DepartmentsWidget() {
               key={`${currentSlide}-${index}`} 
               className={`department-item ${getVariant(index)}`}
             >
-              <div className="department-icon">{dept.icon}</div>
+              <div className="department-icon-box">
+                <div className="department-icon">{dept.icon}</div>
+              </div>
               <div className="department-content">
                 <div className="department-title">{dept.name}</div>
-                <div className="department-desc">{dept.desc}</div>
+                <div className="department-desc-wrapper">
+                  <div className="department-desc">{dept.desc}</div>
+                </div>
               </div>
             </div>
           ))}
