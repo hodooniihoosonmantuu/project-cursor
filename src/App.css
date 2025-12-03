@@ -1030,8 +1030,8 @@ body {
 }
 
 .department-title {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1.2;
   color: white;
   margin: 0;
@@ -1049,9 +1049,9 @@ body {
   opacity: 0.95;
   line-height: 1.5;
   color: white;
-  padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 8px;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
   display: inline-block;
   margin-left: 0; /* Start from icon's left edge */
   width: calc(100% - 0px); /* Full width minus icon space if needed */
