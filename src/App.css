@@ -133,10 +133,13 @@ body {
   z-index: 10;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
+  top: 0;
+  left: 0;
+  right: 0;
 }
 
-.expandable-banner.expanded {
-  position: fixed;
+/* Fixed position handled by inline style in React */
+.expandable-banner[style*="fixed"] {
   top: 20px;
   left: 90px;
   right: 20px;
@@ -150,19 +153,19 @@ body {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 100px;
-  height: 100px;
-  transform: translate(-50%, -50%) scale(0);
+  width: 150px;
+  height: 150px;
+  transform: translate(-50%, -50%);
   background: radial-gradient(
     ellipse at center,
-    rgba(255, 255, 255, 0.15) 0%,
-    rgba(100, 200, 255, 0.08) 40%,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(150, 220, 255, 0.06) 35%,
+    rgba(100, 180, 255, 0.03) 55%,
     transparent 70%
   );
   border-radius: 50%;
   z-index: 5;
   pointer-events: none;
-  opacity: 0;
 }
 
 /* Before image - collapsed state */
@@ -173,7 +176,6 @@ body {
   width: 100%;
   height: 100%;
   z-index: 3;
-  will-change: transform, filter, opacity;
 }
 
 .banner-before img {
@@ -193,8 +195,6 @@ body {
   width: 100%;
   height: 100%;
   z-index: 2;
-  opacity: 0;
-  will-change: transform, filter, opacity;
 }
 
 .banner-after img {
@@ -206,13 +206,17 @@ body {
   border-radius: var(--radius);
 }
 
-/* Subtle glow on expanded */
-.expandable-banner.expanded::after {
-  content: '';
+/* Subtle overlay gradient */
+.banner-overlay {
   position: absolute;
   inset: 0;
   border-radius: var(--radius);
-  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 60%,
+    rgba(0, 0, 0, 0.4) 100%
+  );
   pointer-events: none;
   z-index: 4;
 }

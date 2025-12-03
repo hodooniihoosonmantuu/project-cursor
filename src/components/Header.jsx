@@ -1,127 +1,84 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import beforeImg from '../images/before.jpg'
 import afterImg from '../images/after.jpg'
 
 function Header() {
-  const bannerRef = useRef(null)
   const [isExpanded, setIsExpanded] = useState(false)
-  const timeoutRef = useRef(null)
-
-  useEffect(() => {
-    gsap.fromTo(bannerRef.current,
-      { opacity: 0, y: -10 },
-      { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
-    )
-  }, [])
-
-  const handleMouseEnter = () => {
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current)
-    }
-
-    setIsExpanded(true)
-    const banner = bannerRef.current
-
-    // Subtle expand with smooth timing
-    gsap.to(banner, {
-      height: '380px',
-      duration: 0.8,
-      ease: 'power2.inOut'
-    })
-
-    // Gentle blur out the before image
-    gsap.to('.banner-before', {
-      opacity: 0,
-      filter: 'blur(8px)',
-      scale: 1.02,
-      duration: 0.6,
-      ease: 'power2.inOut'
-    })
-
-    // Smooth fade in the after image with subtle blur clear
-    gsap.fromTo('.banner-after', 
-      { filter: 'blur(12px)', scale: 1.05 },
-      {
-        opacity: 1,
-        filter: 'blur(0px)',
-        scale: 1,
-        duration: 0.8,
-        ease: 'power2.out'
-      }
-    )
-
-    // Water ripple overlay
-    gsap.to('.water-ripple', {
-      opacity: 1,
-      scale: 2.5,
-      duration: 1,
-      ease: 'power2.out'
-    })
-  }
-
-  const handleMouseLeave = () => {
-    timeoutRef.current = setTimeout(() => {
-      const banner = bannerRef.current
-
-      // Fade out after with blur
-      gsap.to('.banner-after', {
-        opacity: 0,
-        filter: 'blur(8px)',
-        scale: 1.02,
-        duration: 0.5,
-        ease: 'power2.in'
-      })
-
-      // Bring back before image smoothly
-      gsap.to('.banner-before', {
-        opacity: 1,
-        filter: 'blur(0px)',
-        scale: 1,
-        duration: 0.6,
-        delay: 0.1,
-        ease: 'power2.out'
-      })
-
-      // Collapse banner
-      gsap.to(banner, {
-        height: '140px',
-        duration: 0.6,
-        delay: 0.15,
-        ease: 'power2.inOut',
-        onComplete: () => setIsExpanded(false)
-      })
-
-      // Reset water ripple
-      gsap.to('.water-ripple', {
-        opacity: 0,
-        scale: 0,
-        duration: 0.4,
-        ease: 'power2.in'
-      })
-    }, 150)
-  }
 
   return (
-    <header 
-      className={`expandable-banner ${isExpanded ? 'expanded' : ''}`} 
-      ref={bannerRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+    <motion.header 
+      className="expandable-banner"
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ 
+        opacity: 1, 
+        y: 0,
+        height: isExpanded ? 380 : 140
+      }}
+      transition={{ 
+        height: { type: "spring", stiffness: 200, damping: 30 },
+        opacity: { duration: 0.5 },
+        y: { duration: 0.5 }
+      }}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
+      style={{ position: isExpanded ? 'fixed' : 'relative' }}
     >
       {/* Water ripple effect */}
-      <div className="water-ripple"></div>
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            className="water-ripple"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: 1, scale: 3 }}
+            exit={{ opacity: 0, scale: 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Before image - collapsed state */}
-      <div className="banner-before">
+      <motion.div 
+        className="banner-before"
+        animate={{ 
+          opacity: isExpanded ? 0 : 1,
+          scale: isExpanded ? 1.05 : 1,
+          filter: isExpanded ? 'blur(12px)' : 'blur(0px)'
+        }}
+        transition={{ 
+          duration: 0.6,
+          ease: [0.4, 0, 0.2, 1]
+        }}
+      >
         <img src={beforeImg} alt="Banner" />
-      </div>
+      </motion.div>
 
       {/* After image - expanded state */}
-      <div className="banner-after">
+      <motion.div 
+        className="banner-after"
+        animate={{ 
+          opacity: isExpanded ? 1 : 0,
+          scale: isExpanded ? 1 : 1.08,
+          filter: isExpanded ? 'blur(0px)' : 'blur(15px)'
+        }}
+        transition={{ 
+          duration: 0.7,
+          ease: [0.4, 0, 0.2, 1],
+          delay: isExpanded ? 0.1 : 0
+        }}
+      >
         <img src={afterImg} alt="Banner expanded" />
-      </div>
-    </header>
+      </motion.div>
+
+      {/* Subtle overlay gradient on hover */}
+      <motion.div
+        className="banner-overlay"
+        animate={{
+          opacity: isExpanded ? 1 : 0
+        }}
+        transition={{ duration: 0.5 }}
+      />
+    </motion.header>
   )
 }
 
