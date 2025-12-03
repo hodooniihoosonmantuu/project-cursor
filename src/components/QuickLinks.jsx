@@ -6,13 +6,18 @@ function QuickLinks() {
 
   useEffect(() => {
     if (linksRef.current) {
-      gsap.from(linksRef.current.children, {
-        scale: 0.8,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.1,
-        ease: 'back.out(1.7)'
-      })
+      const links = linksRef.current.querySelectorAll('.quick-link')
+      gsap.fromTo(links,
+        { scale: 0.9, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.08,
+          ease: 'power2.out',
+          delay: 0.3
+        }
+      )
     }
   }, [])
 
@@ -57,4 +62,3 @@ function QuickLinks() {
 }
 
 export default QuickLinks
-

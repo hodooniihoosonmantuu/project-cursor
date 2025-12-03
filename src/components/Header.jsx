@@ -1,110 +1,60 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import beforeImg from '../images/before.jpg'
+import afterImg from '../images/after.jpg'
 
 function Header() {
-  const bannerRef = useRef(null)
-  const contentRef = useRef(null)
   const [isExpanded, setIsExpanded] = useState(false)
 
-  useEffect(() => {
-    gsap.from(bannerRef.current, {
-      y: -50,
-      opacity: 0,
-      duration: 0.8,
-      ease: 'power3.out'
-    })
-  }, [])
-
-  const toggleBanner = () => {
-    const banner = bannerRef.current
-    const content = contentRef.current
-
-    if (!isExpanded) {
-      // Expand
-      gsap.to(banner, {
-        height: '500px',
-        duration: 0.6,
-        ease: 'power3.inOut'
-      })
-      gsap.to(content, {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        delay: 0.3,
-        ease: 'power2.out'
-      })
-      gsap.to('.banner-text-after', {
-        opacity: 1,
-        duration: 0.3,
-        delay: 0.4
-      })
-      gsap.to('.banner-text-before', {
-        opacity: 0,
-        duration: 0.2
-      })
-    } else {
-      // Collapse
-      gsap.to(content, {
-        opacity: 0,
-        y: 20,
-        duration: 0.3,
-        ease: 'power2.in'
-      })
-      gsap.to(banner, {
-        height: '80px',
-        duration: 0.5,
-        delay: 0.2,
-        ease: 'power3.inOut'
-      })
-      gsap.to('.banner-text-after', {
-        opacity: 0,
-        duration: 0.2
-      })
-      gsap.to('.banner-text-before', {
-        opacity: 1,
-        duration: 0.3,
-        delay: 0.4
-      })
-    }
-
-    setIsExpanded(!isExpanded)
-  }
-
   return (
-    <header 
-      className={`expandable-banner ${isExpanded ? 'expanded' : ''}`} 
-      ref={bannerRef}
-      onClick={toggleBanner}
+    <motion.header 
+      className="expandable-banner"
+      animate={{ 
+        height: isExpanded ? 380 : 140,
+      }}
+      initial={{ opacity: 0, height: 140 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ 
+        height: { 
+          duration: 0.5,
+          ease: [0.4, 0, 0.2, 1]
+        },
+        opacity: { duration: 0.5 }
+      }}
+      onMouseEnter={() => setIsExpanded(true)}
+      onMouseLeave={() => setIsExpanded(false)}
     >
-      {/* Background layers */}
-      <div className="banner-bg-collapsed"></div>
-      <div className="banner-bg-expanded"></div>
-      
-      {/* Motorcycle image */}
-      <div className="banner-motorcycle">
-        <div className="motorcycle-glow"></div>
-      </div>
+      {/* Before image with blurred sides */}
+      <motion.div 
+        className="banner-before"
+        animate={{ 
+          opacity: isExpanded ? 0 : 1,
+        }}
+        transition={{ 
+          duration: 0.3,
+          ease: "easeOut"
+        }}
+      >
+        {/* Blurred background for empty sides */}
+        <img src={beforeImg} alt="" className="banner-blur-bg" aria-hidden="true" />
+        {/* Main image */}
+        <img src={beforeImg} alt="Banner" className="banner-main" />
+      </motion.div>
 
-      {/* Light trail effect */}
-      <div className="light-trail"></div>
-
-      {/* Collapsed state text */}
-      <div className="banner-text-before">
-        <span>Expandable banner before</span>
-      </div>
-
-      {/* Expanded state content */}
-      <div className="banner-expanded-content" ref={contentRef}>
-        <div className="banner-text-after">
-          <span>Expandable banner after</span>
-        </div>
-      </div>
-
-      {/* Click indicator */}
-      <div className="banner-click-hint">
-        {isExpanded ? '▲ Click to collapse' : '▼ Click to expand'}
-      </div>
-    </header>
+      {/* After image - simple full cover */}
+      <motion.img 
+        src={afterImg}
+        alt="Banner expanded"
+        className="banner-img banner-after"
+        animate={{ 
+          opacity: isExpanded ? 1 : 0,
+        }}
+        transition={{ 
+          duration: 0.3,
+          ease: "easeOut"
+        }}
+      />
+    </motion.header>
   )
 }
 

@@ -1,45 +1,48 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
+import miningIcon from '../icons/mining.png'
 
 function Sidebar() {
-  const sidebarRef = useRef(null)
   const [activeItem, setActiveItem] = useState(0)
 
   const menuItems = [
-    { icon: '🏠', label: 'Home' },
-    { icon: '👤', label: 'Profile' },
-    { icon: '📊', label: 'Analytics' },
-    { icon: '📁', label: 'Files' },
-    { icon: '📄', label: 'Documents' },
-    { icon: '📈', label: 'Reports' },
-    { icon: '📋', label: 'Projects' },
-    { icon: '👥', label: 'Team' },
-    { icon: '⚙️', label: 'Settings' }
+    { label: 'Бидний тухай' },
+    { label: 'Үйл ажиллагаа' },
+    { label: 'Мэдээ, Мэдээлэл' },
+    { label: 'Нийгмийн хариуцлага' },
+    { label: 'Сургалт хөгжил' },
+    { label: 'Ажилтны жагсаалт' },
+    { label: 'Гарын авлага' },
+    { label: 'Тусламж' }
   ]
 
-  useEffect(() => {
-    gsap.from(sidebarRef.current.children, {
-      x: -30,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: 'power2.out'
-    })
-  }, [])
-
   return (
-    <aside className="sidebar" ref={sidebarRef}>
-      <div className="sidebar-logo">OT</div>
+    <aside className="sidebar">
       <nav className="sidebar-nav">
         {menuItems.map((item, index) => (
-          <div
+          <motion.div
             key={index}
             className={`sidebar-item ${activeItem === index ? 'active' : ''}`}
             onClick={() => setActiveItem(index)}
-            title={item.label}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            {item.icon}
-          </div>
+            {/* Active background indicator */}
+            {activeItem === index && (
+              <motion.div
+                className="sidebar-active-bg"
+                layoutId="activeBackground"
+                initial={false}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30
+                }}
+              />
+            )}
+            <img src={miningIcon} alt={item.label} className="sidebar-icon" />
+            <span className="sidebar-label">{item.label}</span>
+          </motion.div>
         ))}
       </nav>
     </aside>
@@ -47,4 +50,3 @@ function Sidebar() {
 }
 
 export default Sidebar
-

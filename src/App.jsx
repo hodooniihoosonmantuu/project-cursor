@@ -1,11 +1,12 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
 import StockWidget from './components/StockWidget'
 import KPIWidget from './components/KPIWidget'
 import HRWidget from './components/HRWidget'
+import SafetyWidget from './components/SafetyWidget'
+import ManhoursWidget from './components/ManhoursWidget'
 import WeatherWidget from './components/WeatherWidget'
 import QuickLinks from './components/QuickLinks'
 import NewsSection from './components/NewsSection'
@@ -15,65 +16,64 @@ import TeamMembers from './components/TeamMembers'
 import NewColleagues from './components/NewColleagues'
 import Documents from './components/Documents'
 import OnboardingRoadmap from './components/OnboardingRoadmap'
-import ThreeBackground from './components/ThreeBackground'
 import './App.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 function App() {
   const mainRef = useRef(null)
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Animate widgets on scroll
-      gsap.utils.toArray('.widget').forEach((widget, i) => {
-        gsap.from(widget, {
-          scrollTrigger: {
-            trigger: widget,
-            start: 'top 85%',
-            toggleActions: 'play none none reverse'
-          },
-          y: 50,
-          opacity: 0,
-          duration: 0.6,
-          delay: i * 0.1,
-          ease: 'power3.out'
-        })
-      })
+    // Simple fade-in animation on load - no ScrollTrigger dependency
+    const widgets = gsap.utils.toArray('.widget')
+    
+    gsap.set(widgets, { opacity: 1, y: 0 }) // Ensure visible first
+    
+    gsap.fromTo(widgets, 
+      { opacity: 0, y: 30 },
+      { 
+        opacity: 1, 
+        y: 0, 
+        duration: 0.5, 
+        stagger: 0.1,
+        ease: 'power2.out',
+        delay: 0.2
+      }
+    )
 
-      // Stagger team members
-      gsap.from('.team-member', {
-        scrollTrigger: {
-          trigger: '.team-grid',
-          start: 'top 80%'
-        },
-        scale: 0.8,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'back.out(1.7)'
-      })
+    // Team members animation
+    const teamMembers = gsap.utils.toArray('.team-member')
+    if (teamMembers.length > 0) {
+      gsap.fromTo(teamMembers,
+        { opacity: 0, scale: 0.9 },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.4,
+          stagger: 0.05,
+          ease: 'power2.out',
+          delay: 0.5
+        }
+      )
+    }
 
-      // Animate roadmap steps
-      gsap.from('.roadmap-step', {
-        scrollTrigger: {
-          trigger: '.roadmap-container',
-          start: 'top 80%'
-        },
-        y: 30,
-        opacity: 0,
-        duration: 0.4,
-        stagger: 0.15,
-        ease: 'power2.out'
-      })
-    }, mainRef)
-
-    return () => ctx.revert()
+    // Roadmap steps animation
+    const roadmapSteps = gsap.utils.toArray('.roadmap-step')
+    if (roadmapSteps.length > 0) {
+      gsap.fromTo(roadmapSteps,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: 'power2.out',
+          delay: 0.6
+        }
+      )
+    }
   }, [])
 
   return (
     <div className="app" ref={mainRef}>
-      <ThreeBackground />
       <Sidebar />
       <main className="main-content">
         <Header />
@@ -83,7 +83,16 @@ function App() {
           <div className="top-row">
             <StockWidget />
             <KPIWidget />
+          </div>
+
+          {/* Safety Row - T-shaped layout */}
+          <div className="safety-row">
             <HRWidget />
+            <div className="safety-middle">
+              <SafetyWidget location="БОРОО" days="158 Days" />
+              <SafetyWidget location="УЛААНБУЛАГ" days="1795 Days" />
+            </div>
+            <ManhoursWidget />
           </div>
 
           {/* Second Row */}
@@ -130,4 +139,3 @@ function App() {
 }
 
 export default App
-

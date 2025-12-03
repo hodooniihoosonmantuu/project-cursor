@@ -6,14 +6,18 @@ function NewsSection({ title, variant }) {
 
   useEffect(() => {
     if (sectionRef.current) {
-      gsap.from(sectionRef.current.querySelectorAll('.news-item'), {
-        x: -20,
-        opacity: 0,
-        duration: 0.4,
-        stagger: 0.1,
-        ease: 'power2.out',
-        delay: 0.3
-      })
+      const items = sectionRef.current.querySelectorAll('.news-item')
+      gsap.fromTo(items,
+        { x: -15, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.1,
+          ease: 'power2.out',
+          delay: 0.4
+        }
+      )
     }
   }, [])
 
@@ -66,4 +70,3 @@ function NewsSection({ title, variant }) {
 }
 
 export default NewsSection
-

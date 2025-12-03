@@ -1,62 +1,85 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import ScrambledText from 'react-scrambled-text'
 
 function HRWidget() {
-  const valueRef = useRef(null)
+  const [employeeCount, setEmployeeCount] = useState(598)
   const barsRef = useRef(null)
+  const [showScramble, setShowScramble] = useState(false)
 
   useEffect(() => {
-    // Animate employee count
-    const obj = { value: 0 }
-    gsap.to(obj, {
-      value: 450,
-      duration: 2,
-      ease: 'power2.out',
-      onUpdate: () => {
-        if (valueRef.current) {
-          valueRef.current.textContent = Math.round(obj.value)
-        }
-      }
-    })
+    // Delay scramble effect
+    const timer = setTimeout(() => {
+      setShowScramble(true)
+    }, 2000)
+    
+    return () => clearTimeout(timer)
+  }, [])
 
     // Animate bars
     if (barsRef.current) {
-      gsap.from(barsRef.current.children, {
-        scaleY: 0,
-        transformOrigin: 'bottom',
-        duration: 0.5,
-        stagger: 0.02,
-        ease: 'power2.out',
-        delay: 0.5
-      })
+      const bars = barsRef.current.querySelectorAll('.hr-bar-item')
+      gsap.fromTo(bars,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          transformOrigin: 'bottom',
+          duration: 0.5,
+          stagger: 0.1,
+          ease: 'power2.out',
+          delay: 0.6
+        }
+      )
     }
   }, [])
 
-  const barHeights = [30, 45, 35, 60, 50, 70, 55, 80, 65, 75, 85, 70, 90, 75, 65]
+  const employeeData = [
+    { type: 'Уурхай', percentage: 49, color: '#FFCC2E' },      // Yellow - largest portion
+    { type: 'Улаанбаатар', percentage: 31, color: '#303030' }, // Black - middle portion
+    { type: 'Улаанбулаг', percentage: 19, color: '#7D7D7D' }   // Silver - smallest portion
+  ]
 
   return (
     <div className="widget hr-widget">
-      <div className="hr-title">Хүний нөөцийн хэлтэс</div>
-      <div className="hr-value" ref={valueRef}>0</div>
-      <div className="hr-label">Active Employees</div>
+      <div className="widget-header">
+        <span className="widget-title">Хүний нөөцийн хэлтэс</span>
+        <span className="widget-expand">↗</span>
+      </div>
+      <div className="hr-employee-count">
+        <span className="hr-count-value">
+          {showScramble ? (
+            <ScrambledText
+              text="598"
+              speed={50}
+              scrambleSpeed={30}
+              scrambleDuration={2000}
+              characters="0123456789"
+            />
+          ) : (
+            employeeCount
+          )}
+        </span>
+        <span className="hr-count-label">Нийт ажилчдын тоо</span>
+      </div>
       
       <div className="hr-chart" ref={barsRef}>
-        {barHeights.map((height, i) => (
-          <div
-            key={i}
-            className="hr-bar"
-            style={{ height: `${height}%` }}
-          />
+        {employeeData.map((item, i) => (
+          <div key={i} className="hr-bar-item">
+            <div 
+              className="hr-bar" 
+              style={{ 
+                height: `${item.percentage * 2.2}%`,
+                background: item.color
+              }}
+            >
+              <div className="hr-bar-percentage">{item.percentage}%</div>
+            </div>
+            <div className="hr-bar-label">{item.type}</div>
+          </div>
         ))}
-      </div>
-
-      <div className="hr-buttons">
-        <button className="hr-btn primary">Comment</button>
-        <button className="hr-btn secondary">Promotion</button>
       </div>
     </div>
   )
 }
 
 export default HRWidget
-

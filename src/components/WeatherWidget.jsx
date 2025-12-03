@@ -5,12 +5,18 @@ function WeatherWidget() {
   const widgetRef = useRef(null)
 
   useEffect(() => {
-    gsap.from(widgetRef.current, {
-      scale: 0.9,
-      opacity: 0,
-      duration: 0.6,
-      ease: 'back.out(1.7)'
-    })
+    if (widgetRef.current) {
+      gsap.fromTo(widgetRef.current,
+        { scale: 0.95, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+          delay: 0.3
+        }
+      )
+    }
   }, [])
 
   return (
@@ -28,4 +34,3 @@ function WeatherWidget() {
 }
 
 export default WeatherWidget
-

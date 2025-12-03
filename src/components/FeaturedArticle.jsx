@@ -5,21 +5,18 @@ function FeaturedArticle() {
   const articleRef = useRef(null)
 
   useEffect(() => {
-    const tl = gsap.timeline({ delay: 0.5 })
-    
-    tl.from(articleRef.current, {
-      x: -50,
-      opacity: 0,
-      duration: 0.6,
-      ease: 'power3.out'
-    })
-    .from(articleRef.current.querySelectorAll('.featured-badge, .featured-title, .featured-subtitle'), {
-      y: 20,
-      opacity: 0,
-      duration: 0.4,
-      stagger: 0.1,
-      ease: 'power2.out'
-    }, '-=0.3')
+    if (articleRef.current) {
+      gsap.fromTo(articleRef.current,
+        { x: -30, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.5,
+          ease: 'power2.out',
+          delay: 0.4
+        }
+      )
+    }
   }, [])
 
   return (
@@ -55,4 +52,3 @@ function FeaturedArticle() {
 }
 
 export default FeaturedArticle
-

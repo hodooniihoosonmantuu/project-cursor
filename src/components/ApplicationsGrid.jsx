@@ -6,13 +6,18 @@ function ApplicationsGrid() {
 
   useEffect(() => {
     if (gridRef.current) {
-      gsap.from(gridRef.current.children, {
-        y: 30,
-        opacity: 0,
-        duration: 0.5,
-        stagger: 0.08,
-        ease: 'back.out(1.7)'
-      })
+      const items = gridRef.current.querySelectorAll('.app-item')
+      gsap.fromTo(items,
+        { y: 20, opacity: 0 },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 0.4,
+          stagger: 0.06,
+          ease: 'power2.out',
+          delay: 0.3
+        }
+      )
     }
   }, [])
 
@@ -43,4 +48,3 @@ function ApplicationsGrid() {
 }
 
 export default ApplicationsGrid
-

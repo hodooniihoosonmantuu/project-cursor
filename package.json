@@ -12,9 +12,11 @@
   "dependencies": {
     "@react-three/drei": "^9.88.0",
     "@react-three/fiber": "^8.15.0",
-    "gsap": "^3.12.0",
+    "framer-motion": "^12.23.25",
+    "gsap": "^3.13.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-scrambled-text": "^1.0.3",
     "three": "^0.159.0"
   },
   "devDependencies": {
@@ -24,4 +26,3 @@
     "vite": "^5.0.0"
   }
 }
-
