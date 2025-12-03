@@ -4,32 +4,32 @@ import gsap from 'gsap'
 function KPIWidget() {
   const chartRef = useRef(null)
 
-  // Inflation data matching the image - adjusted for accuracy
+  // Inflation data matching the image exactly
   const inflationData = [
     // 2024
-    { month: 'I', year: '2024', domestic: 4.2, imported: 2.1, solidFuel: 0.5, gasoline: 0.15, max: 0.05, total: 7.0 },
-    { month: 'II', year: '2024', domestic: 3.8, imported: 1.8, solidFuel: 0.4, gasoline: 0.1, max: 0.05, total: 6.15 },
-    { month: 'III', year: '2024', domestic: 3.5, imported: 1.6, solidFuel: 0.35, gasoline: 0.08, max: 0.02, total: 5.55 },
-    { month: 'IV', year: '2024', domestic: 3.2, imported: 1.4, solidFuel: 0.3, gasoline: 0.08, max: 0.02, total: 5.0 },
-    { month: 'V', year: '2024', domestic: 3.0, imported: 1.3, solidFuel: 0.25, gasoline: 0.07, max: 0.02, total: 4.64 },
-    { month: 'VI', year: '2024', domestic: 2.7, imported: 1.1, solidFuel: 0.2, gasoline: 0.06, max: 0.01, total: 4.07 },
-    { month: 'VII', year: '2024', domestic: 2.9, imported: 1.2, solidFuel: 0.3, gasoline: 0.07, max: 0.01, total: 4.48 },
-    { month: 'VIII', year: '2024', domestic: 3.1, imported: 1.3, solidFuel: 0.4, gasoline: 0.08, max: 0.01, total: 4.89 },
-    { month: 'IX', year: '2024', domestic: 3.5, imported: 1.5, solidFuel: 0.5, gasoline: 0.09, max: 0.01, total: 5.6 },
-    { month: 'X', year: '2024', domestic: 4.0, imported: 1.7, solidFuel: 0.6, gasoline: 0.1, max: 0.01, total: 6.4 },
-    { month: 'XI', year: '2024', domestic: 4.5, imported: 1.8, solidFuel: 0.7, gasoline: 0.11, max: 0.01, total: 7.12 },
-    { month: 'XII', year: '2024', domestic: 5.0, imported: 2.0, solidFuel: 0.8, gasoline: 0.12, max: 0.02, total: 7.94 },
+    { month: 'I', year: '2024', max: 0.05, gasoline: 0.15, solidFuel: 0.5, imported: 2.1, domestic: 4.2, total: 7.0 },
+    { month: 'II', year: '2024', max: 0.05, gasoline: 0.1, solidFuel: 0.4, imported: 1.8, domestic: 3.8, total: 6.15 },
+    { month: 'III', year: '2024', max: 0.02, gasoline: 0.08, solidFuel: 0.35, imported: 1.6, domestic: 3.5, total: 5.55 },
+    { month: 'IV', year: '2024', max: 0.02, gasoline: 0.08, solidFuel: 0.3, imported: 1.4, domestic: 3.2, total: 5.0 },
+    { month: 'V', year: '2024', max: 0.02, gasoline: 0.07, solidFuel: 0.25, imported: 1.3, domestic: 3.0, total: 4.64 },
+    { month: 'VI', year: '2024', max: 0.01, gasoline: 0.06, solidFuel: 0.2, imported: 1.1, domestic: 2.7, total: 4.07 },
+    { month: 'VII', year: '2024', max: 0.01, gasoline: 0.07, solidFuel: 0.3, imported: 1.2, domestic: 2.9, total: 4.48 },
+    { month: 'VIII', year: '2024', max: 0.01, gasoline: 0.08, solidFuel: 0.4, imported: 1.3, domestic: 3.1, total: 4.89 },
+    { month: 'IX', year: '2024', max: 0.01, gasoline: 0.09, solidFuel: 0.5, imported: 1.5, domestic: 3.5, total: 5.6 },
+    { month: 'X', year: '2024', max: 0.01, gasoline: 0.1, solidFuel: 0.6, imported: 1.7, domestic: 4.0, total: 6.4 },
+    { month: 'XI', year: '2024', max: 0.01, gasoline: 0.11, solidFuel: 0.7, imported: 1.8, domestic: 4.5, total: 7.12 },
+    { month: 'XII', year: '2024', max: 0.02, gasoline: 0.12, solidFuel: 0.8, imported: 2.0, domestic: 5.0, total: 7.94 },
     // 2025
-    { month: 'I', year: '2025', domestic: 5.5, imported: 2.2, solidFuel: 0.9, gasoline: 0.13, max: 0.02, total: 8.75 },
-    { month: 'II', year: '2025', domestic: 6.0, imported: 2.4, solidFuel: 1.0, gasoline: 0.14, max: 0.02, total: 9.56 },
-    { month: 'III', year: '2025', domestic: 6.2, imported: 2.5, solidFuel: 1.1, gasoline: 0.14, max: 0.02, total: 10.0 },
-    { month: 'IV', year: '2025', domestic: 6.3, imported: 2.4, solidFuel: 1.0, gasoline: 0.13, max: 0.02, total: 9.85 },
-    { month: 'V', year: '2025', domestic: 6.4, imported: 2.3, solidFuel: 0.95, gasoline: 0.13, max: 0.02, total: 9.8 },
-    { month: 'VI', year: '2025', domestic: 6.4, imported: 2.2, solidFuel: 0.9, gasoline: 0.12, max: 0.02, total: 9.64 },
-    { month: 'VII', year: '2025', domestic: 6.5, imported: 2.0, solidFuel: 0.85, gasoline: 0.11, max: 0.02, total: 9.48 },
-    { month: 'VIII', year: '2025', domestic: 6.5, imported: 1.9, solidFuel: 0.8, gasoline: 0.1, max: 0.01, total: 9.31 },
-    { month: 'IX', year: '2025', domestic: 6.5, imported: 1.85, solidFuel: 0.75, gasoline: 0.1, max: 0.01, total: 9.2 },
-    { month: 'X', year: '2025', domestic: 6.5, imported: 1.8, solidFuel: 1.5, gasoline: 0.1, max: 0.01, total: 9.9 }
+    { month: 'I', year: '2025', max: 0.02, gasoline: 0.13, solidFuel: 0.9, imported: 2.2, domestic: 5.5, total: 8.75 },
+    { month: 'II', year: '2025', max: 0.02, gasoline: 0.14, solidFuel: 1.0, imported: 2.4, domestic: 6.0, total: 9.56 },
+    { month: 'III', year: '2025', max: 0.02, gasoline: 0.14, solidFuel: 1.1, imported: 2.5, domestic: 6.2, total: 10.0 },
+    { month: 'IV', year: '2025', max: 0.02, gasoline: 0.13, solidFuel: 1.0, imported: 2.4, domestic: 6.3, total: 9.85 },
+    { month: 'V', year: '2025', max: 0.02, gasoline: 0.13, solidFuel: 0.95, imported: 2.3, domestic: 6.4, total: 9.8 },
+    { month: 'VI', year: '2025', max: 0.02, gasoline: 0.12, solidFuel: 0.9, imported: 2.2, domestic: 6.4, total: 9.64 },
+    { month: 'VII', year: '2025', max: 0.02, gasoline: 0.11, solidFuel: 0.85, imported: 2.0, domestic: 6.5, total: 9.48 },
+    { month: 'VIII', year: '2025', max: 0.01, gasoline: 0.1, solidFuel: 0.8, imported: 1.9, domestic: 6.5, total: 9.31 },
+    { month: 'IX', year: '2025', max: 0.01, gasoline: 0.1, solidFuel: 0.75, imported: 1.85, domestic: 6.5, total: 9.21 },
+    { month: 'X', year: '2025', max: 0.05, gasoline: 0.05, solidFuel: 1.5, imported: 1.8, domestic: 6.5, total: 9.9 }
   ]
 
   useEffect(() => {
@@ -102,21 +102,21 @@ function KPIWidget() {
 
   const barWidth = graphWidth / inflationData.length * 0.7
 
-  // Colors - based on #FFD200 with good contrast between segments
+  // Colors exactly matching the image - blue tones
   const colors = {
-    max: '#FFD200',           // Bright gold/yellow (lightest)
-    gasoline: '#E6C200',       // Slightly darker gold
-    solidFuel: '#CCAA00',      // Medium gold
-    imported: '#B39200',       // Darker gold
-    domestic: '#997A00',       // Darkest gold (most contrast)
-    inflation: '#e74c3c'       // Red line for inflation
+    max: '#e8f4f8',           // Lightest blue/grey (bottom)
+    gasoline: '#b3d9e6',      // Light blue
+    solidFuel: '#5fa8d3',    // Medium blue
+    imported: '#2980b9',      // Darker blue
+    domestic: '#1a4d80',     // Darkest blue (top)
+    inflation: '#e74c3c'      // Red line
   }
 
   return (
     <div className="widget kpi-widget inflation-widget">
       <div className="widget-header">
         <span className="widget-title">
-          УЛААНБААТАР ХОТЫН ЖИЛИЙН ИНФЛЯЦЫН БҮРЭЛДЭХҮҮН, сараар
+          FIGURE 5. ULAANBAATAR CITY ANNUAL INFLATION COMPOSITION, BY MONTH
         </span>
       </div>
       
@@ -154,22 +154,33 @@ function KPIWidget() {
               textAnchor="middle"
               transform={`rotate(-90, 15, ${chartHeight / 2})`}
             >
-              нэгжхувь
+              нэгж хувь
             </text>
           </g>
 
-          {/* Stacked bars */}
+          {/* Vertical line separating 2024 and 2025 */}
+          <line
+            x1={scaleX(11.5)}
+            y1={padding.top}
+            x2={scaleX(11.5)}
+            y2={chartHeight - padding.bottom}
+            stroke="rgba(255, 255, 255, 0.2)"
+            strokeWidth="1"
+            strokeDasharray="2 2"
+          />
+
+          {/* Stacked bars - from bottom to top: Max → Бензин → Хатуу → Импорт → Дотоод */}
           {inflationData.map((data, i) => {
             const x = scaleX(i) - barWidth / 2
             const baselineY = scaleY(0)
             
-            // Stack from bottom (baseline) upward - order from bottom to top: Max → Бензин → Хатуу → Импорт → Дотоод
+            // Stack from bottom (baseline) upward - order from bottom to top
             const segments = [
-              { value: data.max, color: colors.max, label: 'Max' },                    // Bottom - lightest (#FFD200)
-              { value: data.gasoline, color: colors.gasoline, label: 'Бензин түлш' },  // 
-              { value: data.solidFuel, color: colors.solidFuel, label: 'Хатуу түлш' },  // 
-              { value: data.imported, color: colors.imported, label: 'Импортын бараа' }, // 
-              { value: data.domestic, color: colors.domestic, label: 'Дотоодын бараа' } // Top - darkest
+              { value: data.max, color: colors.max, label: 'Max' },
+              { value: data.gasoline, color: colors.gasoline, label: 'Бензин түлш' },
+              { value: data.solidFuel, color: colors.solidFuel, label: 'Хатуу түлш' },
+              { value: data.imported, color: colors.imported, label: 'Импортын бараа' },
+              { value: data.domestic, color: colors.domestic, label: 'Дотоодын бараа' }
             ]
 
             // Calculate cumulative values for proper stacking from bottom to top
@@ -242,10 +253,10 @@ function KPIWidget() {
               )
             })}
 
-            {/* Value labels on line for Oct 2024 (6.4%) and Sept 2025 (9.2%) */}
+            {/* Value labels on line for Oct 2024 (6.4%) and Oct 2025 (9.9%) */}
             {[
               { index: 9, value: 6.4 },  // Oct 2024
-              { index: 19, value: 9.2 }  // Sept 2025
+              { index: 20, value: 9.9 }  // Oct 2025
             ].map((item) => {
               const x = scaleX(item.index)
               const y = scaleY(item.value)
