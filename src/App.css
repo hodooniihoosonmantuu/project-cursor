@@ -1025,9 +1025,11 @@ body {
 }
 
 .department-icon {
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1;
-  filter: brightness(0) invert(1); /* Make icon pure white */
+  color: white;
+  width: 24px;
+  height: 24px;
 }
 
 .department-title-wrapper {

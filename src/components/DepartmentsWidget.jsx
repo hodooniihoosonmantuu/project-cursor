@@ -1,30 +1,51 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import { 
+  HiOutlineCog, 
+  HiOutlineShieldCheck, 
+  HiOutlineLeaf, 
+  HiOutlineWrench, 
+  HiOutlineCog6Tooth,
+  HiOutlineComputerDesktop,
+  HiOutlineMagnifyingGlass,
+  HiOutlineCube,
+  HiOutlineCurrencyDollar,
+  HiOutlineChartBar,
+  HiOutlineClipboardDocumentList,
+  HiOutlineMegaphone,
+  HiOutlineCubeTransparent,
+  HiOutlineUserGroup,
+  HiOutlineBriefcase,
+  HiOutlineScale,
+  HiOutlineShieldExclamation,
+  HiOutlineCheckCircle,
+  HiOutlineLockClosed
+} from 'react-icons/hi2'
 
 function DepartmentsWidget() {
   const linksRef = useRef(null)
   const [currentSlide, setCurrentSlide] = useState(0)
 
   const departments = [
-    { name: 'Боловсруулах үйлдвэр', icon: '🏭', desc: 'Үйлдвэрийн үйл ажиллагаа' },
-    { name: 'Аюулгүй ажиллагааны хэлтэс', icon: '🦺', desc: 'Аюулгүй байдлын удирдлага' },
-    { name: 'Байгаль орчин', icon: '🌿', desc: 'Байгаль орчны хамгаалалт' },
-    { name: 'Уулын засвар', icon: '⛏️', desc: 'Уулын ажлын засвар үйлчилгээ' },
-    { name: 'Үйлдвэрийн засвар', icon: '🔧', desc: 'Үйлдвэрийн тоног төхөөрөмжийн засвар' },
-    { name: 'Мэдээллийн технологи', icon: '💻', desc: 'IT үйлчилгээ, системийн удирдлага' },
-    { name: 'Хайгуул, хүдэр хяналтын хэлтэс', icon: '🔍', desc: 'Хайгуул, хүдрийн хяналт' },
-    { name: 'Уурхайн аж ахуй', icon: '⛰️', desc: 'Уурхайн үйл ажиллагаа' },
-    { name: 'Санхүү бүртгэл', icon: '💰', desc: 'Санхүүгийн удирдлага' },
-    { name: 'Эдийн засгийн хэлтэс', icon: '📊', desc: 'Эдийн засгийн шинжилгээ' },
-    { name: 'Төслийн менежмент', icon: '📈', desc: 'Төслийн удирдлага' },
-    { name: 'Хэвлэл мэдээлэл орон нутагтай харилцах хэлтэс', icon: '📢', desc: 'Харилцаа, мэдээлэл' },
-    { name: 'Хангамжийн хэлтэс', icon: '📦', desc: 'Хангамж, худалдан авалт' },
-    { name: 'Захиргаа хүний нөөц', icon: '👥', desc: 'Захиргаа, хүний нөөц' },
-    { name: 'Хүний нөөцийн хэлтэс', icon: '👔', desc: 'Хүний нөөцийн удирдлага' },
-    { name: 'Хуулийн хэлтэс', icon: '⚖️', desc: 'Хуулийн зөвлөгөө' },
-    { name: 'Хамгаалалтын хэлтэс', icon: '🛡️', desc: 'Аюулгүй байдлын хамгаалалт' },
-    { name: 'Комплайнсийн хэлтэс', icon: '✅', desc: 'Дүрэм, журам' },
-    { name: 'Мэдээллийн аюулгүй байдлын хэлтэс', icon: '🔐', desc: 'Мэдээллийн аюулгүй байдал' }
+    { name: 'Боловсруулах үйлдвэр', icon: HiOutlineCog, desc: 'Үйлдвэрийн үйл ажиллагаа' },
+    { name: 'Аюулгүй ажиллагааны хэлтэс', icon: HiOutlineShieldCheck, desc: 'Аюулгүй байдлын удирдлага' },
+    { name: 'Байгаль орчин', icon: HiOutlineLeaf, desc: 'Байгаль орчны хамгаалалт' },
+    { name: 'Уулын засвар', icon: HiOutlineWrench, desc: 'Уулын ажлын засвар үйлчилгээ' },
+    { name: 'Үйлдвэрийн засвар', icon: HiOutlineCog6Tooth, desc: 'Үйлдвэрийн тоног төхөөрөмжийн засвар' },
+    { name: 'Мэдээллийн технологи', icon: HiOutlineComputerDesktop, desc: 'IT үйлчилгээ, системийн удирдлага' },
+    { name: 'Хайгуул, хүдэр хяналтын хэлтэс', icon: HiOutlineMagnifyingGlass, desc: 'Хайгуул, хүдрийн хяналт' },
+    { name: 'Уурхайн аж ахуй', icon: HiOutlineCube, desc: 'Уурхайн үйл ажиллагаа' },
+    { name: 'Санхүү бүртгэл', icon: HiOutlineCurrencyDollar, desc: 'Санхүүгийн удирдлага' },
+    { name: 'Эдийн засгийн хэлтэс', icon: HiOutlineChartBar, desc: 'Эдийн засгийн шинжилгээ' },
+    { name: 'Төслийн менежмент', icon: HiOutlineClipboardDocumentList, desc: 'Төслийн удирдлага' },
+    { name: 'Хэвлэл мэдээлэл орон нутагтай харилцах хэлтэс', icon: HiOutlineMegaphone, desc: 'Харилцаа, мэдээлэл' },
+    { name: 'Хангамжийн хэлтэс', icon: HiOutlineCubeTransparent, desc: 'Хангамж, худалдан авалт' },
+    { name: 'Захиргаа хүний нөөц', icon: HiOutlineUserGroup, desc: 'Захиргаа, хүний нөөц' },
+    { name: 'Хүний нөөцийн хэлтэс', icon: HiOutlineBriefcase, desc: 'Хүний нөөцийн удирдлага' },
+    { name: 'Хуулийн хэлтэс', icon: HiOutlineScale, desc: 'Хуулийн зөвлөгөө' },
+    { name: 'Хамгаалалтын хэлтэс', icon: HiOutlineShieldExclamation, desc: 'Аюулгүй байдлын хамгаалалт' },
+    { name: 'Комплайнсийн хэлтэс', icon: HiOutlineCheckCircle, desc: 'Дүрэм, журам' },
+    { name: 'Мэдээллийн аюулгүй байдлын хэлтэс', icon: HiOutlineLockClosed, desc: 'Мэдээллийн аюулгүй байдал' }
   ]
 
   const itemsVisible = 10 // Show 10 blocks at once
@@ -90,7 +111,7 @@ function DepartmentsWidget() {
             >
               <div className="department-item-top">
                 <div className="department-icon-box">
-                  <div className="department-icon">{dept.icon}</div>
+                  <dept.icon className="department-icon" />
                 </div>
                 <div className="department-title-wrapper">
                   <div className="department-title">{dept.name}</div>
