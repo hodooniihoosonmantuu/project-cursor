@@ -38,9 +38,11 @@ function ManhoursWidget() {
     }
 
     createParticles()
+  }, [])
 
-    // Animate particles
-    if (particlesRef.current) {
+  // Animate particles after they're rendered
+  useEffect(() => {
+    if (particlesRef.current && particles.length > 0) {
       const particleElements = particlesRef.current.querySelectorAll('.particle')
       particleElements.forEach((particle, i) => {
         const p = particles[i]
