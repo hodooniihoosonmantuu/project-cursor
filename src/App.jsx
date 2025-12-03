@@ -15,7 +15,6 @@ import TeamMembers from './components/TeamMembers'
 import NewColleagues from './components/NewColleagues'
 import Documents from './components/Documents'
 import OnboardingRoadmap from './components/OnboardingRoadmap'
-import ThreeBackground from './components/ThreeBackground'
 import './App.css'
 
 gsap.registerPlugin(ScrollTrigger)
@@ -73,7 +72,6 @@ function App() {
 
   return (
     <div className="app" ref={mainRef}>
-      <ThreeBackground />
       <Sidebar />
       <main className="main-content">
         <Header />
