@@ -28,37 +28,38 @@ function ManhoursWidget() {
       const rect = widgetRef.current.getBoundingClientRect()
       const widgetWidth = rect.width || 300
       const widgetHeight = rect.height || 140
-      const nodeCount = 25
+      const nodeCount = 18
       const newNodes = []
       const newConnections = []
 
       // Create nodes (more concentrated in upper-left, dissipating to bottom-right)
+      // Better spacing for minimal look
       for (let i = 0; i < nodeCount; i++) {
         let x, y
         const rand = Math.random()
-        if (rand < 0.5) {
-          // Concentrate in upper-left (50% of nodes)
-          x = Math.random() * (widgetWidth * 0.5)
-          y = Math.random() * (widgetHeight * 0.5)
-        } else if (rand < 0.8) {
+        if (rand < 0.45) {
+          // Concentrate in upper-left (45% of nodes)
+          x = Math.random() * (widgetWidth * 0.45) + 10
+          y = Math.random() * (widgetHeight * 0.45) + 10
+        } else if (rand < 0.75) {
           // Middle area (30% of nodes)
-          x = Math.random() * (widgetWidth * 0.7)
-          y = Math.random() * (widgetHeight * 0.7)
+          x = Math.random() * (widgetWidth * 0.6) + widgetWidth * 0.2
+          y = Math.random() * (widgetHeight * 0.6) + widgetHeight * 0.2
         } else {
-          // Spread out (20% of nodes)
-          x = Math.random() * widgetWidth
-          y = Math.random() * widgetHeight
+          // Spread out (25% of nodes)
+          x = Math.random() * (widgetWidth * 0.7) + widgetWidth * 0.15
+          y = Math.random() * (widgetHeight * 0.7) + widgetHeight * 0.15
         }
         
         newNodes.push({
           id: i,
           x: x,
           y: y,
-          radius: Math.random() * 3 + 2.5 // Bigger nodes: 2.5-5.5px
+          radius: Math.random() * 1 + 1.2 // Smaller nodes: 1.2-2.2px
         })
       }
 
-      // Create connections between nearby nodes
+      // Create connections between nearby nodes (more selective for minimal look)
       for (let i = 0; i < newNodes.length; i++) {
         for (let j = i + 1; j < newNodes.length; j++) {
           const node1 = newNodes[i]
@@ -67,18 +68,19 @@ function ManhoursWidget() {
             Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)
           )
           
-          // Connect nodes that are close enough (varying connection probability)
-          const maxDistance = 150 // Increased connection distance
+          // Connect nodes that are close enough (more selective connections)
+          const maxDistance = 100
           const connectionChance = 1 - (distance / maxDistance)
-          if (distance < maxDistance && Math.random() < connectionChance * 0.7) {
+          // Reduced connection probability for cleaner look
+          if (distance < maxDistance && Math.random() < connectionChance * 0.4) {
             newConnections.push({
               id: `${i}-${j}`,
               x1: node1.x,
               y1: node1.y,
               x2: node2.x,
               y2: node2.y,
-              opacity: 0.5 + Math.random() * 0.4, // More visible: 0.5-0.9
-              strokeWidth: 1 + Math.random() * 1.5 // Thicker lines: 1-2.5px
+              opacity: 0.3 + Math.random() * 0.3, // More subtle: 0.3-0.6
+              strokeWidth: 0.4 + Math.random() * 0.3 // Thinner lines: 0.4-0.7px
             })
           }
         }
@@ -135,12 +137,6 @@ function ManhoursWidget() {
         height="100%"
         preserveAspectRatio="none"
       >
-        <defs>
-          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#90EE90" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#90EE90" stopOpacity="0.1" />
-          </linearGradient>
-        </defs>
         {/* Connections */}
         {connections.map((conn) => (
           <line
@@ -150,7 +146,7 @@ function ManhoursWidget() {
             y1={conn.y1}
             x2={conn.x2}
             y2={conn.y2}
-            stroke="#90EE90"
+            stroke="#00A614"
             strokeWidth={conn.strokeWidth || 0.5}
             opacity={conn.opacity}
           />
@@ -163,8 +159,8 @@ function ManhoursWidget() {
             cx={node.x}
             cy={node.y}
             r={node.radius}
-            fill="#90EE90"
-            opacity="0.7"
+            fill="#00A614"
+            opacity="0.6"
           />
         ))}
       </svg>
