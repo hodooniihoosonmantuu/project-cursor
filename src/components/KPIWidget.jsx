@@ -102,14 +102,14 @@ function KPIWidget() {
 
   const barWidth = graphWidth / inflationData.length * 0.7
 
-  // Colors - dull yellow tones for contrast
+  // Colors - based on #FFD200 with good contrast between segments
   const colors = {
-    max: '#f5e6d3',
-    gasoline: '#e8d4b8',
-    solidFuel: '#d4b896',
-    imported: '#c19a73',
-    domestic: '#a87d50',
-    inflation: '#e74c3c'
+    max: '#FFD200',           // Bright gold/yellow (lightest)
+    gasoline: '#E6C200',       // Slightly darker gold
+    solidFuel: '#CCAA00',      // Medium gold
+    imported: '#B39200',       // Darker gold
+    domestic: '#997A00',       // Darkest gold (most contrast)
+    inflation: '#e74c3c'       // Red line for inflation
   }
 
   return (
@@ -163,13 +163,13 @@ function KPIWidget() {
             const x = scaleX(i) - barWidth / 2
             const baselineY = scaleY(0)
             
-            // Stack from bottom (baseline) upward - order matters for stacking
+            // Stack from bottom (baseline) upward - order from bottom to top: Max → Бензин → Хатуу → Импорт → Дотоод
             const segments = [
-              { value: data.domestic, color: colors.domestic, label: 'Дотоодын бараа' },
-              { value: data.imported, color: colors.imported, label: 'Импортын бараа' },
-              { value: data.solidFuel, color: colors.solidFuel, label: 'Хатуу түлш' },
-              { value: data.gasoline, color: colors.gasoline, label: 'Бензин түлш' },
-              { value: data.max, color: colors.max, label: 'Max' }
+              { value: data.max, color: colors.max, label: 'Max' },                    // Bottom - lightest (#FFD200)
+              { value: data.gasoline, color: colors.gasoline, label: 'Бензин түлш' },  // 
+              { value: data.solidFuel, color: colors.solidFuel, label: 'Хатуу түлш' },  // 
+              { value: data.imported, color: colors.imported, label: 'Импортын бараа' }, // 
+              { value: data.domestic, color: colors.domestic, label: 'Дотоодын бараа' } // Top - darkest
             ]
 
             // Calculate cumulative values for proper stacking from bottom to top
