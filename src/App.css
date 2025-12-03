@@ -56,7 +56,7 @@ body {
 /* Sidebar */
 .sidebar {
   width: 85px;
-  background: #194D82;
+  background: #0A0A0A;
   border-right: none;
   display: flex;
   flex-direction: column;
