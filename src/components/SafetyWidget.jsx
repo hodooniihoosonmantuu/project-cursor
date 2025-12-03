@@ -21,7 +21,6 @@ function SafetyWidget({ location, days, showExpand = true }) {
 
   return (
     <div className="widget safety-widget" ref={widgetRef}>
-      <div className="safety-indicator">●</div>
       {showExpand && <div className="widget-expand">↗</div>}
       <div className="safety-location">{location}</div>
       <div className="safety-days">{days}</div>
