@@ -4,7 +4,7 @@ import gsap from 'gsap'
 function KPIWidget() {
   const chartRef = useRef(null)
 
-  // Inflation data from Jan 2024 (I) to Oct 2025 (X)
+  // Inflation data matching the image - adjusted for accuracy
   const inflationData = [
     // 2024
     { month: 'I', year: '2024', domestic: 4.2, imported: 2.1, solidFuel: 0.5, gasoline: 0.15, max: 0.05, total: 7.0 },
@@ -22,7 +22,7 @@ function KPIWidget() {
     // 2025
     { month: 'I', year: '2025', domestic: 5.5, imported: 2.2, solidFuel: 0.9, gasoline: 0.13, max: 0.02, total: 8.75 },
     { month: 'II', year: '2025', domestic: 6.0, imported: 2.4, solidFuel: 1.0, gasoline: 0.14, max: 0.02, total: 9.56 },
-    { month: 'III', year: '2025', domestic: 6.2, imported: 2.5, solidFuel: 1.1, gasoline: 0.14, max: 0.02, total: 9.96 },
+    { month: 'III', year: '2025', domestic: 6.2, imported: 2.5, solidFuel: 1.1, gasoline: 0.14, max: 0.02, total: 10.0 },
     { month: 'IV', year: '2025', domestic: 6.3, imported: 2.4, solidFuel: 1.0, gasoline: 0.13, max: 0.02, total: 9.85 },
     { month: 'V', year: '2025', domestic: 6.4, imported: 2.3, solidFuel: 0.95, gasoline: 0.13, max: 0.02, total: 9.8 },
     { month: 'VI', year: '2025', domestic: 6.4, imported: 2.2, solidFuel: 0.9, gasoline: 0.12, max: 0.02, total: 9.64 },
@@ -131,7 +131,7 @@ function KPIWidget() {
                   y1={scaleY(value)}
                   x2={chartWidth - padding.right}
                   y2={scaleY(value)}
-                  stroke="rgba(0, 0, 0, 0.1)"
+                  stroke="rgba(0, 0, 0, 0.08)"
                   strokeWidth="1"
                   strokeDasharray={value === -1 ? '0' : '4 4'}
                 />
@@ -154,7 +154,7 @@ function KPIWidget() {
               textAnchor="middle"
               transform={`rotate(-90, 15, ${chartHeight / 2})`}
             >
-              нэгж хувь
+              нэгжхувь
             </text>
           </g>
 
@@ -163,7 +163,7 @@ function KPIWidget() {
             const x = scaleX(i) - barWidth / 2
             const baselineY = scaleY(0)
             
-            // Stack from bottom (baseline) upward
+            // Stack from bottom (baseline) upward - order matters for stacking
             const segments = [
               { value: data.domestic, color: colors.domestic, label: 'Дотоодын бараа' },
               { value: data.imported, color: colors.imported, label: 'Импортын бараа' },
@@ -193,7 +193,7 @@ function KPIWidget() {
                       width={barWidth}
                       height={height}
                       fill={segment.color}
-                      stroke="rgba(255, 255, 255, 0.1)"
+                      stroke="rgba(255, 255, 255, 0.2)"
                       strokeWidth="0.5"
                     />
                   )
@@ -219,18 +219,17 @@ function KPIWidget() {
               strokeLinejoin="round"
             />
             
-            {/* Highlighted dots on line for Oct 2024 and Oct 2025 */}
-            {inflationData.filter((_, i) => i === 9 || i === 20).map((data, idx) => {
-              const i = idx === 0 ? 9 : 20
+            {/* Dots on line at key points */}
+            {inflationData.map((data, i) => {
               const x = scaleX(i)
               const y = scaleY(data.total)
               
               return (
                 <circle
-                  key={`highlight-${i}`}
+                  key={i}
                   cx={x}
                   cy={y}
-                  r="5"
+                  r="3.5"
                   fill={colors.inflation}
                   stroke="white"
                   strokeWidth="2"
@@ -238,24 +237,25 @@ function KPIWidget() {
               )
             })}
 
-            {/* Value labels on line for specific months */}
-            {inflationData.filter((_, i) => i === 9 || i === 20).map((data, idx) => {
-              const i = idx === 0 ? 9 : 20
-              const x = scaleX(i)
-              const y = scaleY(data.total)
+            {/* Value labels on line for Oct 2024 (6.4%) and Sept 2025 (9.2%) */}
+            {[
+              { index: 9, value: 6.4 },  // Oct 2024
+              { index: 19, value: 9.2 }  // Sept 2025
+            ].map((item) => {
+              const x = scaleX(item.index)
+              const y = scaleY(item.value)
               
               return (
-                <g key={i} className="inflation-value-label">
+                <g key={item.index} className="inflation-value-label">
                   <text
                     x={x}
                     y={y - 12}
                     fill={colors.inflation}
-                    fontSize="11"
+                    fontSize="12"
                     fontWeight="700"
                     textAnchor="middle"
-                    style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
                   >
-                    {data.total.toFixed(1)}%
+                    {item.value.toFixed(1)}%
                   </text>
                 </g>
               )

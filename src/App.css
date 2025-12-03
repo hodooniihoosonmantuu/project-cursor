@@ -500,6 +500,7 @@ body {
 
 .kpi-widget.inflation-widget {
   grid-column: span 2;
+  background: #fefce8;
 }
 
 .kpi-widget .widget-header {
