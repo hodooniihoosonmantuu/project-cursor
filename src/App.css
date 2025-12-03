@@ -816,6 +816,35 @@ body {
   align-items: center;
   min-height: 140px;
   text-align: center;
+  overflow: hidden;
+}
+
+.manhours-ascii-bg {
+  position: absolute;
+  bottom: -20px;
+  right: -30px;
+  opacity: 0.15;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.walking-man {
+  font-family: 'Courier New', monospace;
+  font-size: 8px;
+  line-height: 1;
+  color: #4a90e2;
+  margin: 0;
+  white-space: pre;
+  animation: walkCycle 1s steps(2) infinite;
+}
+
+@keyframes walkCycle {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(2px);
+  }
 }
 
 .manhours-indicator {

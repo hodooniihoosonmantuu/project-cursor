@@ -1,20 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import ScrambledText from 'react-scrambled-text'
 
 function HRWidget() {
   const [employeeCount, setEmployeeCount] = useState(598)
   const barsRef = useRef(null)
-  const [showScramble, setShowScramble] = useState(false)
 
   useEffect(() => {
-    // Delay scramble effect
-    const timer = setTimeout(() => {
-      setShowScramble(true)
-    }, 2000)
-    
-    return () => clearTimeout(timer)
-  }, [])
+    // Animate employee count
+    const obj = { value: 0 }
+    gsap.to(obj, {
+      value: 598,
+      duration: 1.5,
+      ease: 'power2.out',
+      delay: 0.5,
+      onUpdate: () => {
+        setEmployeeCount(Math.round(obj.value))
+      }
+    })
 
     // Animate bars
     if (barsRef.current) {
@@ -46,19 +48,7 @@ function HRWidget() {
         <span className="widget-expand">↗</span>
       </div>
       <div className="hr-employee-count">
-        <span className="hr-count-value">
-          {showScramble ? (
-            <ScrambledText
-              text="598"
-              speed={50}
-              scrambleSpeed={30}
-              scrambleDuration={2000}
-              characters="0123456789"
-            />
-          ) : (
-            employeeCount
-          )}
-        </span>
+        <span className="hr-count-value">{employeeCount}</span>
         <span className="hr-count-label">Нийт ажилчдын тоо</span>
       </div>
       
