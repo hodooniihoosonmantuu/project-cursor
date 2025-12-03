@@ -31,10 +31,12 @@ function Header() {
         className="banner-before"
         animate={{ 
           opacity: isExpanded ? 0 : 1,
+          filter: isExpanded ? 'blur(20px)' : 'blur(0px)',
+          scale: isExpanded ? 1.05 : 1,
         }}
         transition={{ 
-          duration: 0.4,
-          ease: "easeInOut"
+          duration: 0.5,
+          ease: [0.4, 0, 0.2, 1]
         }}
       >
         {/* Blurred background layer */}
@@ -50,10 +52,12 @@ function Header() {
         className="banner-after"
         animate={{ 
           opacity: isExpanded ? 1 : 0,
+          filter: isExpanded ? 'blur(0px)' : 'blur(20px)',
+          scale: isExpanded ? 1 : 0.98,
         }}
         transition={{ 
-          duration: 0.4,
-          ease: "easeInOut"
+          duration: 0.6,
+          ease: [0.4, 0, 0.2, 1]
         }}
       >
         {/* Blurred background layer */}
