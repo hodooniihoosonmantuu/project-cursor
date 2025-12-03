@@ -230,7 +230,7 @@ function KPIWidget() {
               }).join(' ')}
               fill="none"
               stroke={colors.inflation}
-              strokeWidth="3.5"
+              strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
             />
@@ -245,10 +245,10 @@ function KPIWidget() {
                   key={i}
                   cx={x}
                   cy={y}
-                  r="3.5"
+                  r="2.5"
                   fill={colors.inflation}
                   stroke="rgba(0, 0, 0, 0.3)"
-                  strokeWidth="1.5"
+                  strokeWidth="1"
                 />
               )
             })}
