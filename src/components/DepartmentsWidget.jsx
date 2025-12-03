@@ -27,7 +27,7 @@ function DepartmentsWidget() {
     { name: 'Мэдээллийн аюулгүй байдлын хэлтэс', icon: '🔐', desc: 'Мэдээллийн аюулгүй байдал' }
   ]
 
-  const itemsVisible = 8 // Show 8 blocks at once
+  const itemsVisible = 10 // Show 10 blocks at once
   const itemsPerScroll = 4 // Scroll 4 blocks at a time
   const totalSlides = Math.ceil((departments.length - itemsVisible) / itemsPerScroll) + 1
 
@@ -73,7 +73,7 @@ function DepartmentsWidget() {
     return departments.slice(start, end)
   }
 
-  // Color variants: top row different colors, bottom row different colors
+  // Color variants: cycling through colors
   const getVariant = (index) => {
     const variants = ['red', 'dark-grey', 'yellow', 'green']
     return variants[index % 4]
