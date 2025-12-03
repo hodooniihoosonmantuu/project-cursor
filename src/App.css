@@ -270,7 +270,7 @@ body {
 
 /* Widget Base Styles */
 .widget {
-  background: #FFD200;
+  background: var(--card-bg);
   border-radius: var(--radius);
   padding: 18px;
   box-shadow: var(--shadow);
@@ -317,8 +317,8 @@ body {
 
 /* Stock Widget */
 .stock-widget {
-  background: #FFD200;
-  color: var(--text-primary);
+  background: #0a0a0a;
+  color: white;
   position: relative;
   overflow: hidden;
 }
@@ -506,14 +506,14 @@ body {
 
 /* KPI Widget / Inflation Widget */
 .kpi-widget {
-  background: #FFD200;
+  background: var(--card-bg);
   position: relative;
 }
 
 .kpi-widget.inflation-widget {
   grid-column: span 2;
-  background: #FFD200;
-  color: var(--text-primary);
+  background: #0a0a0a;
+  color: white;
 }
 
 .kpi-widget.inflation-widget .widget-header,
