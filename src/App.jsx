@@ -8,7 +8,7 @@ import HRWidget from './components/HRWidget'
 import SafetyWidget from './components/SafetyWidget'
 import ManhoursWidget from './components/ManhoursWidget'
 import WeatherWidget from './components/WeatherWidget'
-import QuickLinks from './components/QuickLinks'
+import DepartmentsWidget from './components/DepartmentsWidget'
 import NewsSection from './components/NewsSection'
 import ApplicationsGrid from './components/ApplicationsGrid'
 import FeaturedArticle from './components/FeaturedArticle'
@@ -102,7 +102,7 @@ function App() {
               <NewsSection title="Алтны тойм мэдээ" variant="gold" />
             </div>
             <div className="center-column">
-              <QuickLinks />
+              <DepartmentsWidget />
               <NewsSection title="Аюулгүй ажиллагааны сэрэмжлүүлэг" variant="safety" />
             </div>
           </div>

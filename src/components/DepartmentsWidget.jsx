@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
-function QuickLinks() {
+function DepartmentsWidget() {
   const linksRef = useRef(null)
 
   useEffect(() => {
@@ -61,4 +61,5 @@ function QuickLinks() {
   )
 }
 
-export default QuickLinks
+export default DepartmentsWidget
+
