@@ -1,24 +1,14 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import beforeImg from '../images/before.jpg'
 import afterImg from '../images/after.jpg'
 
 function Header() {
   const [isExpanded, setIsExpanded] = useState(false)
-  const [isGlitching, setIsGlitching] = useState(false)
-
-  useEffect(() => {
-    if (isExpanded || !isExpanded) {
-      // Trigger glitch effect on state change
-      setIsGlitching(true)
-      const timer = setTimeout(() => setIsGlitching(false), 400)
-      return () => clearTimeout(timer)
-    }
-  }, [isExpanded])
 
   return (
     <motion.header 
-      className={`expandable-banner ${isGlitching ? 'glitching' : ''}`}
+      className="expandable-banner"
       animate={{ 
         height: isExpanded ? 420 : 140,
       }}
@@ -36,59 +26,47 @@ function Header() {
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      {/* Glitch layers */}
-      <div className="glitch-wrapper">
-        {/* Before image with glitch layers */}
-        <motion.div 
-          className="banner-before"
-          animate={{ 
-            opacity: isExpanded ? 0 : 1,
-          }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="glitch-layers">
-            <div className="glitch-layer glitch-r">
-              <div className="banner-blur-bg"><img src={beforeImg} alt="" /></div>
-              <img src={beforeImg} alt="" className="banner-main-img" />
-            </div>
-            <div className="glitch-layer glitch-g">
-              <div className="banner-blur-bg"><img src={beforeImg} alt="" /></div>
-              <img src={beforeImg} alt="" className="banner-main-img" />
-            </div>
-            <div className="glitch-layer glitch-b">
-              <div className="banner-blur-bg"><img src={beforeImg} alt="" /></div>
-              <img src={beforeImg} alt="Banner" className="banner-main-img" />
-            </div>
-          </div>
-        </motion.div>
+      {/* Before image with blurred background */}
+      <motion.div 
+        className="banner-before"
+        animate={{ 
+          opacity: isExpanded ? 0 : 1,
+          filter: isExpanded ? 'blur(20px)' : 'blur(0px)',
+          scale: isExpanded ? 1.05 : 1,
+        }}
+        transition={{ 
+          duration: 0.5,
+          ease: [0.4, 0, 0.2, 1]
+        }}
+      >
+        {/* Blurred background layer */}
+        <div className="banner-blur-bg">
+          <img src={beforeImg} alt="" aria-hidden="true" />
+        </div>
+        {/* Main image */}
+        <img src={beforeImg} alt="Banner" className="banner-main-img" />
+      </motion.div>
 
-        {/* After image with glitch layers */}
-        <motion.div 
-          className="banner-after"
-          animate={{ 
-            opacity: isExpanded ? 1 : 0,
-          }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-        >
-          <div className="glitch-layers">
-            <div className="glitch-layer glitch-r">
-              <div className="banner-blur-bg"><img src={afterImg} alt="" /></div>
-              <img src={afterImg} alt="" className="banner-main-img" />
-            </div>
-            <div className="glitch-layer glitch-g">
-              <div className="banner-blur-bg"><img src={afterImg} alt="" /></div>
-              <img src={afterImg} alt="" className="banner-main-img" />
-            </div>
-            <div className="glitch-layer glitch-b">
-              <div className="banner-blur-bg"><img src={afterImg} alt="" /></div>
-              <img src={afterImg} alt="Banner expanded" className="banner-main-img" />
-            </div>
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Scan lines overlay */}
-      <div className="scanlines"></div>
+      {/* After image with blurred background */}
+      <motion.div 
+        className="banner-after"
+        animate={{ 
+          opacity: isExpanded ? 1 : 0,
+          filter: isExpanded ? 'blur(0px)' : 'blur(20px)',
+          scale: isExpanded ? 1 : 0.98,
+        }}
+        transition={{ 
+          duration: 0.6,
+          ease: [0.4, 0, 0.2, 1]
+        }}
+      >
+        {/* Blurred background layer */}
+        <div className="banner-blur-bg">
+          <img src={afterImg} alt="" aria-hidden="true" />
+        </div>
+        {/* Main image */}
+        <img src={afterImg} alt="Banner expanded" className="banner-main-img" />
+      </motion.div>
     </motion.header>
   )
 }
