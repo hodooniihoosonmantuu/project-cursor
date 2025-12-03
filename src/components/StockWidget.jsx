@@ -3,67 +3,97 @@ import gsap from 'gsap'
 
 function StockWidget() {
   const chartRef = useRef(null)
-  const volumeRef = useRef(null)
 
   useEffect(() => {
-    // Animate candlestick chart
+    // Animate chart elements
     if (chartRef.current) {
-      gsap.fromTo('.candlestick',
-        { opacity: 0, scaleY: 0 },
+      gsap.fromTo('.candlestick, .trend-band, .signal-marker',
+        { opacity: 0 },
         {
           opacity: 1,
-          scaleY: 1,
-          duration: 0.6,
+          duration: 0.8,
           stagger: 0.05,
           ease: 'power2.out',
           delay: 0.5
         }
       )
     }
-
-    // Animate volume bars
-    if (volumeRef.current) {
-      gsap.fromTo('.volume-bar',
-        { scaleY: 0 },
-        {
-          scaleY: 1,
-          duration: 0.4,
-          stagger: 0.03,
-          ease: 'power2.out',
-          delay: 0.8,
-          transformOrigin: 'bottom'
-        }
-      )
-    }
   }, [])
 
-  // Sample candlestick data (O, H, L, C)
-  const candles = [
-    { o: 4200, h: 4250, l: 4180, c: 4230, isUp: true },
-    { o: 4230, h: 4280, l: 4210, c: 4250, isUp: true },
-    { o: 4250, h: 4270, l: 4190, c: 4200, isUp: false },
-    { o: 4200, h: 4240, l: 4180, c: 4220, isUp: true },
-    { o: 4220, h: 4260, l: 4200, c: 4240, isUp: true },
-    { o: 4240, h: 4250, l: 4210, c: 4215, isUp: false },
-    { o: 4215, h: 4240, l: 4195, c: 4225, isUp: true },
-    { o: 4225, h: 4235, l: 4200, c: 4210, isUp: false },
-    { o: 4210, h: 4240, l: 4190, c: 4230, isUp: true },
-    { o: 4230, h: 4250, l: 4215, c: 4211, isUp: false }
+  // Candlestick data with trend bands
+  const data = [
+    // Initial upward trend (teal band)
+    { o: 4200, h: 4250, l: 4180, c: 4230, isUp: true, band: 'teal', trend: 'up', ma: 4215 },
+    { o: 4230, h: 4280, l: 4210, c: 4250, isUp: true, band: 'teal', trend: 'up', ma: 4230 },
+    { o: 4250, h: 4270, l: 4190, c: 4200, isUp: false, band: 'teal', trend: 'up', ma: 4240 },
+    { o: 4200, h: 4240, l: 4180, c: 4220, isUp: true, band: 'teal', trend: 'up', ma: 4235 },
+    { o: 4220, h: 4260, l: 4200, c: 4240, isUp: true, band: 'teal', trend: 'up', ma: 4245 },
+    
+    // Consolidation/decline (red band starts)
+    { o: 4240, h: 4250, l: 4210, c: 4215, isUp: false, band: 'red', trend: 'down', ma: 4238, signal: 'sell' },
+    { o: 4215, h: 4240, l: 4195, c: 4225, isUp: true, band: 'red', trend: 'down', ma: 4230 },
+    { o: 4225, h: 4235, l: 4200, c: 4210, isUp: false, band: 'red', trend: 'down', ma: 4220 },
+    
+    // New upward trend starts (buy signal)
+    { o: 4210, h: 4240, l: 4190, c: 4230, isUp: true, band: 'teal', trend: 'up', ma: 4215, signal: 'buy' },
+    { o: 4230, h: 4280, l: 4220, c: 4260, isUp: true, band: 'teal', trend: 'up', ma: 4235 },
+    { o: 4260, h: 4320, l: 4250, c: 4290, isUp: true, band: 'teal', trend: 'up', ma: 4260 },
+    { o: 4290, h: 4350, l: 4280, c: 4320, isUp: true, band: 'teal', trend: 'up', ma: 4290 },
+    { o: 4320, h: 4380, l: 4310, c: 4350, isUp: true, band: 'teal', trend: 'up', ma: 4320 },
+    { o: 4350, h: 4400, l: 4340, c: 4370, isUp: true, band: 'teal', trend: 'up', ma: 4350 },
+    
+    // Peak and reversal (red band)
+    { o: 4370, h: 4390, l: 4330, c: 4340, isUp: false, band: 'red', trend: 'down', ma: 4355 },
+    { o: 4340, h: 4360, l: 4290, c: 4310, isUp: false, band: 'red', trend: 'down', ma: 4340 },
+    { o: 4310, h: 4330, l: 4260, c: 4280, isUp: false, band: 'red', trend: 'down', ma: 4310 },
+    { o: 4280, h: 4300, l: 4230, c: 4250, isUp: false, band: 'red', trend: 'down', ma: 4280 }
   ]
 
-  const volumeData = [85, 92, 75, 88, 95, 82, 90, 78, 93, 86]
-
-  const priceRange = { min: 3700, max: 4500 }
+  const priceRange = { min: 4150, max: 4450 }
   const chartHeight = 180
-  const chartWidth = 400
+  const chartWidth = 500
 
   const scaleY = (value) => {
     return chartHeight - ((value - priceRange.min) / (priceRange.max - priceRange.min)) * chartHeight
   }
 
-  const currentPrice = 4211.478
-  const change = -18.961
-  const changePercent = -0.45
+  // Generate trend band paths
+  const generateTrendBand = (startIdx, endIdx, isUp) => {
+    if (startIdx === endIdx) return null
+    
+    const points = data.slice(startIdx, endIdx + 1)
+    const upperPath = points.map((d, i) => {
+      const x = ((startIdx + i) / data.length) * chartWidth
+      const y = scaleY(d.h)
+      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`
+    }).join(' ')
+    
+    const lowerPath = points.map((d, i) => {
+      const x = ((startIdx + i) / data.length) * chartWidth
+      const y = scaleY(d.l)
+      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`
+    }).reverse().map((point, i) => {
+      if (i === 0) return point.replace('M', 'L')
+      return point
+    }).join(' ')
+
+    return `${upperPath} ${lowerPath} Z`
+  }
+
+  // Group data by bands
+  let bandGroups = []
+  let currentBand = { type: data[0].band, start: 0 }
+  for (let i = 1; i < data.length; i++) {
+    if (data[i].band !== currentBand.type) {
+      bandGroups.push({ ...currentBand, end: i - 1 })
+      currentBand = { type: data[i].band, start: i }
+    }
+  }
+  bandGroups.push({ ...currentBand, end: data.length - 1 })
+
+  const currentPrice = 4250
+  const change = -120
+  const changePercent = -2.76
   const isPositive = change >= 0
 
   return (
@@ -73,41 +103,51 @@ function StockWidget() {
           <div className="stock-label">Алтны ханш</div>
         </div>
         <div className="stock-price-info">
-          <div className="stock-price-current">4,211.478</div>
+          <div className="stock-price-current">{currentPrice.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
           <div className={`stock-price-change ${isPositive ? 'positive' : 'negative'}`}>
-            {isPositive ? '+' : ''}{change.toFixed(3)} ({changePercent.toFixed(2)}%)
+            {isPositive ? '+' : ''}{change.toFixed(2)} ({changePercent.toFixed(2)}%)
           </div>
-        </div>
-      </div>
-
-      <div className="stock-ohlc">
-        <div className="ohlc-item">
-          <span className="ohlc-label">O</span>
-          <span className="ohlc-value">4,231.470</span>
-        </div>
-        <div className="ohlc-item">
-          <span className="ohlc-label">H</span>
-          <span className="ohlc-value">4,236.000</span>
-        </div>
-        <div className="ohlc-item">
-          <span className="ohlc-label">L</span>
-          <span className="ohlc-value">4,198.320</span>
-        </div>
-        <div className="ohlc-item">
-          <span className="ohlc-label">C</span>
-          <span className="ohlc-value">4,211.478</span>
         </div>
       </div>
 
       <div className="stock-chart-container" ref={chartRef}>
         <div className="price-axis">
-          <span>4,500</span>
-          <span>4,200</span>
-          <span>3,900</span>
-          <span>3,700</span>
+          <span>4,450</span>
+          <span>4,300</span>
+          <span>4,150</span>
         </div>
         
         <svg className="candlestick-chart" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
+          {/* Trend Bands */}
+          {bandGroups.map((band, bandIdx) => {
+            const pathData = generateTrendBand(band.start, band.end, band.type === 'teal')
+            if (!pathData) return null
+            
+            return (
+              <path
+                key={bandIdx}
+                className="trend-band"
+                d={pathData}
+                fill={band.type === 'teal' ? 'rgba(0, 200, 180, 0.2)' : 'rgba(231, 76, 60, 0.2)'}
+                stroke={band.type === 'teal' ? 'rgba(0, 200, 180, 0.3)' : 'rgba(231, 76, 60, 0.3)'}
+                strokeWidth="1"
+              />
+            )
+          })}
+
+          {/* Moving Average Line */}
+          <polyline
+            className="ma-line"
+            points={data.map((d, i) => {
+              const x = (i / data.length) * chartWidth
+              const y = scaleY(d.ma)
+              return `${x},${y}`
+            }).join(' ')}
+            fill="none"
+            stroke="rgba(200, 200, 200, 0.6)"
+            strokeWidth="2"
+          />
+
           {/* Current price line */}
           <line 
             x1="0" 
@@ -117,19 +157,19 @@ function StockWidget() {
             stroke="#e74c3c" 
             strokeWidth="1" 
             strokeDasharray="4 4"
-            opacity="0.6"
+            opacity="0.5"
           />
           
           {/* Candlesticks */}
-          {candles.map((candle, i) => {
-            const x = (i / candles.length) * chartWidth + 20
-            const w = (chartWidth / candles.length) * 0.6
+          {data.map((candle, i) => {
+            const x = (i / data.length) * chartWidth
+            const w = (chartWidth / data.length) * 0.7
             const bodyTop = scaleY(Math.max(candle.o, candle.c))
             const bodyBottom = scaleY(Math.min(candle.o, candle.c))
-            const bodyHeight = Math.abs(bodyTop - bodyBottom) || 2
+            const bodyHeight = Math.abs(bodyTop - bodyBottom) || 3
             const wickTop = scaleY(candle.h)
             const wickBottom = scaleY(candle.l)
-            const color = candle.isUp ? '#2ecc71' : '#e74c3c'
+            const color = candle.isUp ? '#00c8b4' : '#e74c3c'
 
             return (
               <g key={i} className="candlestick">
@@ -149,39 +189,30 @@ function StockWidget() {
                   width={w} 
                   height={bodyHeight} 
                   fill={color}
+                  rx="1"
                 />
+
+                {/* Buy Signal (Green Triangle) */}
+                {candle.signal === 'buy' && (
+                  <polygon
+                    className="signal-marker"
+                    points={`${x + w / 2},${wickBottom + 8} ${x + w / 2 - 6},${wickBottom + 16} ${x + w / 2 + 6},${wickBottom + 16}`}
+                    fill="#2ecc71"
+                    opacity="0.9"
+                  />
+                )}
+
+                {/* Sell Signal (Red Heart) */}
+                {candle.signal === 'sell' && (
+                  <g className="signal-marker" transform={`translate(${x + w / 2}, ${wickTop - 8})`}>
+                    <path
+                      d="M0,0 C0,-4 -4,-6 -4,-8 C-4,-10 -2,-12 0,-12 C2,-12 4,-10 4,-8 C4,-6 0,-4 0,0 Z"
+                      fill="#e74c3c"
+                      opacity="0.9"
+                    />
+                  </g>
+                )}
               </g>
-            )
-          })}
-        </svg>
-
-        <div className="time-axis">
-          <span>Oct</span>
-          <span>Nov</span>
-          <span>Dec</span>
-        </div>
-      </div>
-
-      {/* Volume Chart */}
-      <div className="volume-chart-container" ref={volumeRef}>
-        <svg className="volume-chart" viewBox="0 0 400 60" preserveAspectRatio="none">
-          {volumeData.map((vol, i) => {
-            const x = (i / volumeData.length) * 400
-            const w = (400 / volumeData.length) * 0.8
-            const height = (vol / 100) * 60
-            const color = candles[i]?.isUp ? '#2ecc71' : '#e74c3c'
-
-            return (
-              <rect
-                key={i}
-                className="volume-bar"
-                x={x}
-                y={60 - height}
-                width={w}
-                height={height}
-                fill={color}
-                opacity="0.7"
-              />
             )
           })}
         </svg>
