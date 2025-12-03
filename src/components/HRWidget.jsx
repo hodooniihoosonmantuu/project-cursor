@@ -20,14 +20,14 @@ function HRWidget() {
 
     // Animate bars
     if (barsRef.current) {
-      const bars = barsRef.current.querySelectorAll('.hr-bar')
+      const bars = barsRef.current.querySelectorAll('.hr-bar-item')
       gsap.fromTo(bars,
         { scaleY: 0 },
         {
           scaleY: 1,
           transformOrigin: 'bottom',
-          duration: 0.4,
-          stagger: 0.03,
+          duration: 0.5,
+          stagger: 0.1,
           ease: 'power2.out',
           delay: 0.6
         }
@@ -35,27 +35,37 @@ function HRWidget() {
     }
   }, [])
 
-  const barHeights = [30, 45, 35, 60, 50, 70, 55, 80, 65, 75, 85, 70, 90, 75, 65]
+  const employeeData = [
+    { type: 'Permanent', percentage: 49, color: '#f5d98a' },
+    { type: 'Contract', percentage: 31, color: '#4a5568' },
+    { type: 'Probation', percentage: 19, color: '#a0aec0' }
+  ]
 
   return (
     <div className="widget hr-widget">
-      <div className="hr-title">Хүний нөөцийн хэлтэс</div>
-      <div className="hr-value">{employeeCount}</div>
-      <div className="hr-label">Active Employees</div>
+      <div className="widget-header">
+        <span className="widget-title">OHS Daily Safety Flash</span>
+        <span className="widget-expand">↗</span>
+      </div>
+      <div className="hr-employee-count">
+        <span className="hr-count-value">{employeeCount}</span>
+        <span className="hr-count-label">Active Employee</span>
+      </div>
       
       <div className="hr-chart" ref={barsRef}>
-        {barHeights.map((height, i) => (
-          <div
-            key={i}
-            className="hr-bar"
-            style={{ height: `${height}%` }}
-          />
+        {employeeData.map((item, i) => (
+          <div key={i} className="hr-bar-item">
+            <div className="hr-bar-percentage">{item.percentage}%</div>
+            <div 
+              className="hr-bar" 
+              style={{ 
+                height: `${item.percentage * 1.2}%`,
+                background: item.color
+              }}
+            />
+            <div className="hr-bar-label">{item.type}</div>
+          </div>
         ))}
-      </div>
-
-      <div className="hr-buttons">
-        <button className="hr-btn primary">Comment</button>
-        <button className="hr-btn secondary">Promotion</button>
       </div>
     </div>
   )

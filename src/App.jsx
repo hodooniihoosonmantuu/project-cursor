@@ -5,6 +5,8 @@ import Sidebar from './components/Sidebar'
 import StockWidget from './components/StockWidget'
 import KPIWidget from './components/KPIWidget'
 import HRWidget from './components/HRWidget'
+import SafetyWidget from './components/SafetyWidget'
+import ManhoursWidget from './components/ManhoursWidget'
 import WeatherWidget from './components/WeatherWidget'
 import QuickLinks from './components/QuickLinks'
 import NewsSection from './components/NewsSection'
@@ -82,6 +84,13 @@ function App() {
             <StockWidget />
             <KPIWidget />
             <HRWidget />
+          </div>
+
+          {/* Safety Row */}
+          <div className="safety-row">
+            <SafetyWidget location="Boroo" days="158 Days" />
+            <ManhoursWidget />
+            <SafetyWidget location="Ulaanbulag" days="1795 Days" />
           </div>
 
           {/* Second Row */}
