@@ -109,7 +109,7 @@ function KPIWidget() {
     solidFuel: '#FFB300',     // Bright yellow-orange
     imported: '#FFA000',      // Bright orange-yellow
     domestic: '#FF8F00',     // Bright deep yellow (top)
-    inflation: '#00E5FF'      // Bright cyan/teal - stands out on dark background
+    inflation: '#e74c3c'      // Red line with white outline
   }
 
   return (
@@ -220,7 +220,20 @@ function KPIWidget() {
 
           {/* Inflation line - draw after bars so it's on top */}
           <g className="inflation-line-group">
-            {/* Main inflation line */}
+            {/* Main inflation line with white outline */}
+            <polyline
+              className="inflation-line-outline"
+              points={inflationData.map((data, i) => {
+                const x = scaleX(i)
+                const y = scaleY(data.total)
+                return `${x},${y}`
+              }).join(' ')}
+              fill="none"
+              stroke="white"
+              strokeWidth="5.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
             <polyline
               className="inflation-line"
               points={inflationData.map((data, i) => {
