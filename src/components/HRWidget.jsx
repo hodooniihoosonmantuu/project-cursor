@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
-import ScrambledText from 'react-scrambled-text'
 
 function HRWidget() {
   const [employeeCount, setEmployeeCount] = useState(598)
@@ -49,15 +48,7 @@ function HRWidget() {
         <span className="widget-expand">↗</span>
       </div>
       <div className="hr-employee-count">
-        <span className="hr-count-value">
-          <ScrambledText
-            text={employeeCount.toString()}
-            speed={50}
-            scrambleSpeed={30}
-            scrambleDuration={2000}
-            characters="0123456789"
-          />
-        </span>
+        <span className="hr-count-value">{employeeCount}</span>
         <span className="hr-count-label">Нийт ажилчдын тоо</span>
       </div>
       
@@ -71,15 +62,7 @@ function HRWidget() {
                 background: item.color
               }}
             >
-              <div className="hr-bar-percentage">
-                <ScrambledText
-                  text={`${item.percentage}%`}
-                  speed={50}
-                  scrambleSpeed={30}
-                  scrambleDuration={2000}
-                  characters="0123456789%"
-                />
-              </div>
+              <div className="hr-bar-percentage">{item.percentage}%</div>
             </div>
             <div className="hr-bar-label">{item.type}</div>
           </div>

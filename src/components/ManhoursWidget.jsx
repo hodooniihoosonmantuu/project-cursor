@@ -175,7 +175,6 @@ function ManhoursWidget() {
         ref={canvasRef}
         className="particles-canvas"
       />
-      <div className="manhours-indicator">●</div>
       <div className="manhours-title">MANHOURS</div>
       <div className="manhours-value-large">1383942.80</div>
       <div className="widget-expand">↗</div>
