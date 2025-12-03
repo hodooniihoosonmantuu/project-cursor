@@ -657,19 +657,6 @@ body {
 .hr-widget {
   background: #F8EDCC;
   position: relative;
-  color: #000000;
-}
-
-.hr-widget * {
-  color: #000000;
-}
-
-.hr-widget .widget-title,
-.hr-widget .hr-count-value,
-.hr-widget .hr-count-label,
-.hr-widget .hr-bar-label,
-.hr-widget .hr-bar-percentage {
-  color: #000000;
 }
 
 .hr-widget .widget-header {
@@ -685,14 +672,14 @@ body {
   font-family: 'Space Mono', monospace;
   font-size: 32px;
   font-weight: 700;
-  color: #000000 !important;
+  color: var(--text-primary);
   display: block;
   line-height: 1;
 }
 
 .hr-count-label {
   font-size: 11px;
-  color: #000000 !important;
+  color: var(--text-secondary);
   text-transform: uppercase;
   margin-top: 4px;
   display: block;
@@ -729,7 +716,7 @@ body {
   justify-content: center;
   font-size: 11px;
   font-weight: 600;
-  color: #000000 !important;
+  color: var(--text-primary);
   z-index: 2;
 }
 
@@ -761,17 +748,6 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 140px;
-  color: #000000;
-}
-
-.safety-widget * {
-  color: #000000;
-}
-
-.safety-widget .safety-location,
-.safety-widget .safety-days,
-.safety-widget .safety-label {
-  color: #000000;
 }
 
 .safety-indicator {
@@ -792,7 +768,7 @@ body {
 .safety-location {
   font-size: 14px;
   font-weight: 600;
-  color: #000000 !important;
+  color: var(--text-primary);
   margin-bottom: 8px;
 }
 
@@ -820,22 +796,12 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 140px;
-  color: #000000;
-}
-
-.manhours-widget-card * {
-  color: #000000;
-}
-
-.manhours-widget-card .manhours-title,
-.manhours-widget-card .manhours-value-large {
-  color: #000000;
 }
 
 .manhours-title {
   font-size: 14px;
   font-weight: 700;
-  color: #000000 !important;
+  color: var(--text-primary);
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 12px;
@@ -845,7 +811,7 @@ body {
   font-family: 'Space Mono', monospace;
   font-size: 32px;
   font-weight: 700;
-  color: #000000 !important;
+  color: #2ecc71;
   line-height: 1;
 }
 
