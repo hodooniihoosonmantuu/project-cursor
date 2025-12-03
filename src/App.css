@@ -834,22 +834,49 @@ body {
 }
 
 .manhours-title {
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 24px;
+  font-weight: 800;
   color: #000000 !important;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-bottom: 12px;
+  letter-spacing: 2px;
+  margin-bottom: 16px;
   text-align: center;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  animation: titlePulse 3s ease-in-out infinite;
 }
 
 .manhours-value-large {
   font-family: 'Space Mono', monospace;
-  font-size: 36px;
+  font-size: 52px;
   font-weight: 700;
   color: #2ecc71;
   line-height: 1;
   text-align: center;
+  text-shadow: 0 0 10px rgba(46, 204, 113, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+  animation: numberGlow 2s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4));
+}
+
+@keyframes titlePulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.02);
+    opacity: 0.95;
+  }
+}
+
+@keyframes numberGlow {
+  0%, 100% {
+    text-shadow: 0 0 10px rgba(46, 204, 113, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
+    filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4));
+  }
+  50% {
+    text-shadow: 0 0 20px rgba(46, 204, 113, 0.8), 0 2px 4px rgba(0, 0, 0, 0.2);
+    filter: drop-shadow(0 0 15px rgba(46, 204, 113, 0.7));
+  }
 }
 
 /* Weather Widget */
