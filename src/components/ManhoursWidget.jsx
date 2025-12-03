@@ -23,21 +23,29 @@ function ManhoursWidget() {
 
     // Create network nodes and connections
     const createNetwork = () => {
-      const widgetWidth = 300 // Approximate widget width
-      const widgetHeight = 140 // Approximate widget height
-      const nodeCount = 15
+      if (!widgetRef.current) return
+      
+      const rect = widgetRef.current.getBoundingClientRect()
+      const widgetWidth = rect.width || 300
+      const widgetHeight = rect.height || 140
+      const nodeCount = 20
       const newNodes = []
       const newConnections = []
 
-      // Create nodes (more concentrated in upper-left)
+      // Create nodes (more concentrated in upper-left, dissipating to bottom-right)
       for (let i = 0; i < nodeCount; i++) {
         let x, y
-        if (i < nodeCount * 0.6) {
-          // Concentrate in upper-left
-          x = Math.random() * (widgetWidth * 0.6)
-          y = Math.random() * (widgetHeight * 0.6)
+        const rand = Math.random()
+        if (rand < 0.5) {
+          // Concentrate in upper-left (50% of nodes)
+          x = Math.random() * (widgetWidth * 0.5)
+          y = Math.random() * (widgetHeight * 0.5)
+        } else if (rand < 0.8) {
+          // Middle area (30% of nodes)
+          x = Math.random() * (widgetWidth * 0.7)
+          y = Math.random() * (widgetHeight * 0.7)
         } else {
-          // Spread out
+          // Spread out (20% of nodes)
           x = Math.random() * widgetWidth
           y = Math.random() * widgetHeight
         }
@@ -46,7 +54,7 @@ function ManhoursWidget() {
           id: i,
           x: x,
           y: y,
-          radius: Math.random() * 2 + 1.5
+          radius: Math.random() * 1.5 + 1
         })
       }
 
@@ -59,15 +67,18 @@ function ManhoursWidget() {
             Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)
           )
           
-          // Connect nodes that are close enough
-          if (distance < 120 && Math.random() > 0.5) {
+          // Connect nodes that are close enough (varying connection probability)
+          const maxDistance = 100
+          const connectionChance = 1 - (distance / maxDistance)
+          if (distance < maxDistance && Math.random() < connectionChance * 0.6) {
             newConnections.push({
               id: `${i}-${j}`,
               x1: node1.x,
               y1: node1.y,
               x2: node2.x,
               y2: node2.y,
-              opacity: 0.3 + Math.random() * 0.4
+              opacity: 0.2 + Math.random() * 0.3,
+              strokeWidth: 0.3 + Math.random() * 0.4
             })
           }
         }
@@ -76,6 +87,9 @@ function ManhoursWidget() {
       setNodes(newNodes)
       setConnections(newConnections)
     }
+
+    // Wait for widget to be rendered
+    setTimeout(createNetwork, 100)
 
     createNetwork()
 
@@ -115,9 +129,16 @@ function ManhoursWidget() {
       <svg 
         ref={svgRef}
         className="network-svg"
-        viewBox="0 0 300 140"
+        width="100%"
+        height="100%"
         preserveAspectRatio="none"
       >
+        <defs>
+          <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#90EE90" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#90EE90" stopOpacity="0.1" />
+          </linearGradient>
+        </defs>
         {/* Connections */}
         {connections.map((conn) => (
           <line
@@ -128,7 +149,7 @@ function ManhoursWidget() {
             x2={conn.x2}
             y2={conn.y2}
             stroke="#90EE90"
-            strokeWidth="0.5"
+            strokeWidth={conn.strokeWidth || 0.5}
             opacity={conn.opacity}
           />
         ))}
@@ -141,7 +162,7 @@ function ManhoursWidget() {
             cy={node.y}
             r={node.radius}
             fill="#90EE90"
-            opacity="0.6"
+            opacity="0.5"
           />
         ))}
       </svg>
