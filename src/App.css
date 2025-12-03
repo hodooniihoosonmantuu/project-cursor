@@ -139,7 +139,42 @@ body {
   box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Banner images */
+/* Before image container */
+.banner-before {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  overflow: hidden;
+  border-radius: var(--radius);
+}
+
+/* Blurred background - fills empty sides */
+.banner-blur-bg {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
+  object-fit: cover;
+  object-position: center;
+  filter: blur(25px) saturate(1.1);
+  z-index: 1;
+}
+
+/* Main before image - fit to show full image */
+.banner-main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  z-index: 2;
+}
+
+/* After image - simple full cover */
 .banner-img {
   position: absolute;
   top: 0;
@@ -151,14 +186,8 @@ body {
   border-radius: var(--radius);
 }
 
-.banner-before {
-  z-index: 2;
-  object-fit: contain;
-}
-
 .banner-after {
   z-index: 1;
-  object-fit: cover;
   object-position: center 30%;
 }
 

@@ -24,11 +24,9 @@ function Header() {
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      {/* Before image */}
-      <motion.img 
-        src={beforeImg}
-        alt="Banner"
-        className="banner-img banner-before"
+      {/* Before image with blurred sides */}
+      <motion.div 
+        className="banner-before"
         animate={{ 
           opacity: isExpanded ? 0 : 1,
         }}
@@ -36,9 +34,14 @@ function Header() {
           duration: 0.3,
           ease: "easeOut"
         }}
-      />
+      >
+        {/* Blurred background for empty sides */}
+        <img src={beforeImg} alt="" className="banner-blur-bg" aria-hidden="true" />
+        {/* Main image */}
+        <img src={beforeImg} alt="Banner" className="banner-main" />
+      </motion.div>
 
-      {/* After image */}
+      {/* After image - simple full cover */}
       <motion.img 
         src={afterImg}
         alt="Banner expanded"
