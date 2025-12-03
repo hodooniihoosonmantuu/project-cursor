@@ -122,76 +122,44 @@ body {
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
 }
 
-/* Expandable Banner - Smooth Push Design */
+/* Expandable Banner - Clean Minimal Design */
 .expandable-banner {
   position: relative;
   margin: 20px 20px 0 20px;
   height: 140px;
   overflow: hidden;
   cursor: pointer;
-  background: #0a0a0a;
+  background: #111;
   z-index: 50;
   border-radius: var(--radius);
   box-shadow: var(--shadow);
-  transition: box-shadow 0.3s ease;
 }
 
 .expandable-banner:hover {
-  box-shadow: 0 8px 35px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.2);
 }
 
-/* Before image */
-.banner-before {
+/* Banner images */
+.banner-img {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 2;
-  overflow: hidden;
-  border-radius: var(--radius);
-}
-
-/* After image */
-.banner-after {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-  overflow: hidden;
-  border-radius: var(--radius);
-}
-
-/* Blurred background layer - fills empty space */
-.banner-blur-bg {
-  position: absolute;
-  top: -20px;
-  left: -20px;
-  right: -20px;
-  bottom: -20px;
-  z-index: 1;
-}
-
-.banner-blur-bg img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
-  filter: blur(30px) saturate(1.2);
-  transform: scale(1.1);
+  border-radius: var(--radius);
 }
 
-/* Main image - fit inside container */
-.banner-main-img {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  object-position: center;
-  display: block;
+.banner-before {
   z-index: 2;
+  object-fit: contain;
+}
+
+.banner-after {
+  z-index: 1;
+  object-fit: cover;
+  object-position: center 30%;
 }
 
 /* Dashboard Grid */

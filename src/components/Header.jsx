@@ -10,59 +10,47 @@ function Header() {
     <motion.header 
       className="expandable-banner"
       animate={{ 
-        height: isExpanded ? 420 : 140,
+        height: isExpanded ? 380 : 140,
       }}
       initial={{ opacity: 0, height: 140 }}
       whileInView={{ opacity: 1 }}
       transition={{ 
         height: { 
-          type: "spring",
-          stiffness: 120,
-          damping: 20,
-          mass: 0.8
+          duration: 0.5,
+          ease: [0.4, 0, 0.2, 1]
         },
         opacity: { duration: 0.5 }
       }}
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      {/* Before image with blurred background */}
-      <motion.div 
-        className="banner-before"
+      {/* Before image */}
+      <motion.img 
+        src={beforeImg}
+        alt="Banner"
+        className="banner-img banner-before"
         animate={{ 
           opacity: isExpanded ? 0 : 1,
         }}
         transition={{ 
-          duration: 0.4,
-          ease: "easeInOut"
+          duration: 0.3,
+          ease: "easeOut"
         }}
-      >
-        {/* Blurred background layer */}
-        <div className="banner-blur-bg">
-          <img src={beforeImg} alt="" aria-hidden="true" />
-        </div>
-        {/* Main image */}
-        <img src={beforeImg} alt="Banner" className="banner-main-img" />
-      </motion.div>
+      />
 
-      {/* After image with blurred background */}
-      <motion.div 
-        className="banner-after"
+      {/* After image */}
+      <motion.img 
+        src={afterImg}
+        alt="Banner expanded"
+        className="banner-img banner-after"
         animate={{ 
           opacity: isExpanded ? 1 : 0,
         }}
         transition={{ 
-          duration: 0.4,
-          ease: "easeInOut"
+          duration: 0.3,
+          ease: "easeOut"
         }}
-      >
-        {/* Blurred background layer */}
-        <div className="banner-blur-bg">
-          <img src={afterImg} alt="" aria-hidden="true" />
-        </div>
-        {/* Main image */}
-        <img src={afterImg} alt="Banner expanded" className="banner-main-img" />
-      </motion.div>
+      />
     </motion.header>
   )
 }
