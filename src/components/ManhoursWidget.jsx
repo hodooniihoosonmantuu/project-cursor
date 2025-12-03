@@ -23,15 +23,17 @@ function ManhoursWidget() {
     // Create particles
     const createParticles = () => {
       const newParticles = []
-      for (let i = 0; i < 30; i++) {
+      const colors = ['#FFD700', '#2ecc71', '#4a90e2', '#FFCC2E', '#FF6B6B', '#9b59b6']
+      for (let i = 0; i < 50; i++) {
         newParticles.push({
           id: i,
           x: Math.random() * 100,
-          y: Math.random() * 100,
-          size: Math.random() * 4 + 2,
-          duration: Math.random() * 3 + 2,
-          delay: Math.random() * 2,
-          color: ['#FFD700', '#2ecc71', '#4a90e2', '#FFCC2E'][Math.floor(Math.random() * 4)]
+          y: Math.random() * 100 + 100, // Start from bottom
+          size: Math.random() * 5 + 1.5,
+          duration: Math.random() * 4 + 2,
+          delay: Math.random() * 3,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rotation: Math.random() * 360
         })
       }
       setParticles(newParticles)
@@ -47,16 +49,39 @@ function ManhoursWidget() {
       particleElements.forEach((particle, i) => {
         const p = particles[i]
         if (p) {
+          // Reset position
+          gsap.set(particle, {
+            y: `${p.y}%`,
+            x: `${p.x}%`,
+            opacity: 0.9,
+            scale: 1,
+            rotation: p.rotation
+          })
+
+          // Animate upward with drift
+          const driftX = (Math.random() - 0.5) * 80
+          const moveY = -Math.random() * 120 - 80
+          
           gsap.to(particle, {
-            y: `+=${Math.random() * 100 + 50}`,
-            x: `+=${(Math.random() - 0.5) * 50}`,
+            y: `+=${moveY}%`,
+            x: `+=${driftX}%`,
             opacity: 0,
-            scale: 0,
+            scale: 0.3,
+            rotation: `+=${Math.random() * 360}`,
             duration: p.duration,
             delay: p.delay,
             ease: 'power1.out',
             repeat: -1,
-            yoyo: false
+            yoyo: false,
+            onComplete: () => {
+              // Reset to bottom when animation completes
+              gsap.set(particle, {
+                y: `${Math.random() * 20 + 100}%`,
+                x: `${Math.random() * 100}%`,
+                opacity: 0.9,
+                scale: 1
+              })
+            }
           })
         }
       })
