@@ -575,6 +575,19 @@ body {
   border-radius: 1px;
 }
 
+/* Inflation line styling */
+.inflation-line-group {
+  pointer-events: none;
+}
+
+.inflation-line {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.inflation-line-group circle {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
 .widget-expand {
   position: absolute;
   top: 15px;

@@ -16,7 +16,7 @@ function KPIWidget() {
     { month: 'VII', year: '2024', domestic: 2.9, imported: 1.2, solidFuel: 0.3, gasoline: 0.07, max: 0.01, total: 4.48 },
     { month: 'VIII', year: '2024', domestic: 3.1, imported: 1.3, solidFuel: 0.4, gasoline: 0.08, max: 0.01, total: 4.89 },
     { month: 'IX', year: '2024', domestic: 3.5, imported: 1.5, solidFuel: 0.5, gasoline: 0.09, max: 0.01, total: 5.6 },
-    { month: 'X', year: '2024', domestic: 4.0, imported: 1.7, solidFuel: 0.6, gasoline: 0.1, max: 0.01, total: 6.41 },
+    { month: 'X', year: '2024', domestic: 4.0, imported: 1.7, solidFuel: 0.6, gasoline: 0.1, max: 0.01, total: 6.4 },
     { month: 'XI', year: '2024', domestic: 4.5, imported: 1.8, solidFuel: 0.7, gasoline: 0.11, max: 0.01, total: 7.12 },
     { month: 'XII', year: '2024', domestic: 5.0, imported: 2.0, solidFuel: 0.8, gasoline: 0.12, max: 0.02, total: 7.94 },
     // 2025
@@ -28,8 +28,8 @@ function KPIWidget() {
     { month: 'VI', year: '2025', domestic: 6.4, imported: 2.2, solidFuel: 0.9, gasoline: 0.12, max: 0.02, total: 9.64 },
     { month: 'VII', year: '2025', domestic: 6.5, imported: 2.0, solidFuel: 0.85, gasoline: 0.11, max: 0.02, total: 9.48 },
     { month: 'VIII', year: '2025', domestic: 6.5, imported: 1.9, solidFuel: 0.8, gasoline: 0.1, max: 0.01, total: 9.31 },
-    { month: 'IX', year: '2025', domestic: 6.5, imported: 1.85, solidFuel: 0.75, gasoline: 0.1, max: 0.01, total: 9.21 },
-    { month: 'X', year: '2025', domestic: 6.5, imported: 1.8, solidFuel: 1.5, gasoline: 0.1, max: 0.01, total: 9.91 }
+    { month: 'IX', year: '2025', domestic: 6.5, imported: 1.85, solidFuel: 0.75, gasoline: 0.1, max: 0.01, total: 9.2 },
+    { month: 'X', year: '2025', domestic: 6.5, imported: 1.8, solidFuel: 1.5, gasoline: 0.1, max: 0.01, total: 9.9 }
   ]
 
   useEffect(() => {
@@ -202,48 +202,65 @@ function KPIWidget() {
             )
           })}
 
-          {/* Inflation line */}
-          <polyline
-            className="inflation-line"
-            points={inflationData.map((data, i) => {
+          {/* Inflation line - draw after bars so it's on top */}
+          <g className="inflation-line-group">
+            {/* Main inflation line */}
+            <polyline
+              className="inflation-line"
+              points={inflationData.map((data, i) => {
+                const x = scaleX(i)
+                const y = scaleY(data.total)
+                return `${x},${y}`
+              }).join(' ')}
+              fill="none"
+              stroke={colors.inflation}
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+            
+            {/* Highlighted dots on line for Oct 2024 and Oct 2025 */}
+            {inflationData.filter((_, i) => i === 9 || i === 20).map((data, idx) => {
+              const i = idx === 0 ? 9 : 20
               const x = scaleX(i)
               const y = scaleY(data.total)
-              return `${x},${y}`
-            }).join(' ')}
-            fill="none"
-            stroke={colors.inflation}
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-
-          {/* Value labels on line */}
-          {inflationData.filter((_, i) => i === 9 || i === 20).map((data, idx) => {
-            const i = idx === 0 ? 9 : 20
-            const x = scaleX(i)
-            const y = scaleY(data.total)
-            
-            return (
-              <g key={i} className="inflation-value-label">
+              
+              return (
                 <circle
+                  key={`highlight-${i}`}
                   cx={x}
                   cy={y}
-                  r="4"
+                  r="5"
                   fill={colors.inflation}
+                  stroke="white"
+                  strokeWidth="2"
                 />
-                <text
-                  x={x}
-                  y={y - 10}
-                  fill={colors.inflation}
-                  fontSize="11"
-                  fontWeight="600"
-                  textAnchor="middle"
-                >
-                  {data.total.toFixed(1)}%
-                </text>
-              </g>
-            )
-          })}
+              )
+            })}
+
+            {/* Value labels on line for specific months */}
+            {inflationData.filter((_, i) => i === 9 || i === 20).map((data, idx) => {
+              const i = idx === 0 ? 9 : 20
+              const x = scaleX(i)
+              const y = scaleY(data.total)
+              
+              return (
+                <g key={i} className="inflation-value-label">
+                  <text
+                    x={x}
+                    y={y - 12}
+                    fill={colors.inflation}
+                    fontSize="11"
+                    fontWeight="700"
+                    textAnchor="middle"
+                    style={{ textShadow: '0 1px 2px rgba(255,255,255,0.8)' }}
+                  >
+                    {data.total.toFixed(1)}%
+                  </text>
+                </g>
+              )
+            })}
+          </g>
 
           {/* X-axis labels */}
           <g className="x-axis">
