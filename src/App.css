@@ -853,6 +853,7 @@ body {
   left: 15px;
   font-size: 12px;
   color: #FFD700;
+  z-index: 2;
 }
 
 .manhours-widget-card .widget-expand {
@@ -860,6 +861,7 @@ body {
   bottom: 15px;
   right: 15px;
   top: auto;
+  z-index: 2;
 }
 
 .manhours-title {
@@ -872,6 +874,8 @@ body {
   text-align: center;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   animation: titlePulse 3s ease-in-out infinite;
+  position: relative;
+  z-index: 2;
 }
 
 .manhours-value-large {
@@ -884,6 +888,8 @@ body {
   text-shadow: 0 0 10px rgba(46, 204, 113, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
   animation: numberGlow 2s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4));
+  position: relative;
+  z-index: 2;
 }
 
 @keyframes titlePulse {
