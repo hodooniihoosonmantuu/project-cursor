@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
+import beforeImg from '../images/before.jpg'
+import afterImg from '../images/after.jpg'
 
 function Header() {
   const bannerRef = useRef(null)
-  const contentRef = useRef(null)
   const [isExpanded, setIsExpanded] = useState(false)
 
   useEffect(() => {
@@ -17,53 +18,39 @@ function Header() {
 
   const toggleBanner = () => {
     const banner = bannerRef.current
-    const content = contentRef.current
 
     if (!isExpanded) {
-      // Expand
+      // Expand to full screen
       gsap.to(banner, {
-        height: '500px',
+        height: '100vh',
         duration: 0.6,
         ease: 'power3.inOut'
       })
-      gsap.to(content, {
-        opacity: 1,
-        y: 0,
-        duration: 0.4,
-        delay: 0.3,
-        ease: 'power2.out'
-      })
-      gsap.to('.banner-text-after', {
-        opacity: 1,
-        duration: 0.3,
-        delay: 0.4
-      })
-      gsap.to('.banner-text-before', {
+      gsap.to('.banner-before', {
         opacity: 0,
-        duration: 0.2
+        duration: 0.3
+      })
+      gsap.to('.banner-after', {
+        opacity: 1,
+        duration: 0.4,
+        delay: 0.2
       })
     } else {
-      // Collapse
-      gsap.to(content, {
+      // Collapse to 166px
+      gsap.to('.banner-after', {
         opacity: 0,
-        y: 20,
-        duration: 0.3,
-        ease: 'power2.in'
+        duration: 0.3
+      })
+      gsap.to('.banner-before', {
+        opacity: 1,
+        duration: 0.4,
+        delay: 0.2
       })
       gsap.to(banner, {
-        height: '80px',
+        height: '166px',
         duration: 0.5,
         delay: 0.2,
         ease: 'power3.inOut'
-      })
-      gsap.to('.banner-text-after', {
-        opacity: 0,
-        duration: 0.2
-      })
-      gsap.to('.banner-text-before', {
-        opacity: 1,
-        duration: 0.3,
-        delay: 0.4
       })
     }
 
@@ -76,28 +63,14 @@ function Header() {
       ref={bannerRef}
       onClick={toggleBanner}
     >
-      {/* Background layers */}
-      <div className="banner-bg-collapsed"></div>
-      <div className="banner-bg-expanded"></div>
-      
-      {/* Motorcycle image */}
-      <div className="banner-motorcycle">
-        <div className="motorcycle-glow"></div>
+      {/* Before image - collapsed state */}
+      <div className="banner-before">
+        <img src={beforeImg} alt="Banner collapsed" />
       </div>
 
-      {/* Light trail effect */}
-      <div className="light-trail"></div>
-
-      {/* Collapsed state text */}
-      <div className="banner-text-before">
-        <span>Expandable banner before</span>
-      </div>
-
-      {/* Expanded state content */}
-      <div className="banner-expanded-content" ref={contentRef}>
-        <div className="banner-text-after">
-          <span>Expandable banner after</span>
-        </div>
+      {/* After image - expanded state */}
+      <div className="banner-after">
+        <img src={afterImg} alt="Banner expanded" />
       </div>
 
       {/* Click indicator */}
