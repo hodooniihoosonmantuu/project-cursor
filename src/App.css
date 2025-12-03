@@ -698,6 +698,7 @@ body {
   justify-content: space-around;
   gap: 15px;
   margin-top: 15px;
+  padding-bottom: 30px;
 }
 
 .hr-bar-item {
@@ -707,6 +708,7 @@ body {
   align-items: center;
   position: relative;
   height: 100%;
+  justify-content: flex-end;
 }
 
 .hr-bar-percentage {
@@ -743,7 +745,9 @@ body {
 }
 
 .hr-bar-label {
-  margin-top: 8px;
+  position: absolute;
+  bottom: -25px;
+  width: 100%;
   font-size: 11px;
   color: #000000 !important;
   text-align: center;
