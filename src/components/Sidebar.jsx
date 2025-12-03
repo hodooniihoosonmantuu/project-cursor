@@ -1,52 +1,48 @@
-import { useEffect, useRef, useState } from 'react'
-import gsap from 'gsap'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 
 function Sidebar() {
-  const sidebarRef = useRef(null)
   const [activeItem, setActiveItem] = useState(0)
 
   const menuItems = [
-    { icon: '🏠', label: 'Home' },
-    { icon: '👤', label: 'Profile' },
-    { icon: '📊', label: 'Analytics' },
-    { icon: '📁', label: 'Files' },
-    { icon: '📄', label: 'Documents' },
-    { icon: '📈', label: 'Reports' },
-    { icon: '📋', label: 'Projects' },
-    { icon: '👥', label: 'Team' },
-    { icon: '⚙️', label: 'Settings' }
+    { icon: '🏠', label: 'Accueil' },
+    { icon: '🌲', label: 'Le Parc' },
+    { icon: '📰', label: 'Actualités' },
+    { icon: '📁', label: 'Documents' },
+    { icon: '📊', label: 'Rapports' },
+    { icon: '📋', label: 'Projets' },
+    { icon: '👥', label: 'Équipe' },
+    { icon: '⚙️', label: 'Paramètres' }
   ]
 
-  useEffect(() => {
-    if (sidebarRef.current) {
-      const items = sidebarRef.current.querySelectorAll('.sidebar-item')
-      gsap.fromTo(items,
-        { x: -20, opacity: 0 },
-        {
-          x: 0,
-          opacity: 1,
-          duration: 0.3,
-          stagger: 0.05,
-          ease: 'power2.out',
-          delay: 0.2
-        }
-      )
-    }
-  }, [])
-
   return (
-    <aside className="sidebar" ref={sidebarRef}>
+    <aside className="sidebar">
       <div className="sidebar-logo">OT</div>
       <nav className="sidebar-nav">
         {menuItems.map((item, index) => (
-          <div
+          <motion.div
             key={index}
             className={`sidebar-item ${activeItem === index ? 'active' : ''}`}
             onClick={() => setActiveItem(index)}
-            title={item.label}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            {item.icon}
-          </div>
+            {/* Active background indicator */}
+            {activeItem === index && (
+              <motion.div
+                className="sidebar-active-bg"
+                layoutId="activeBackground"
+                initial={false}
+                transition={{
+                  type: "spring",
+                  stiffness: 300,
+                  damping: 30
+                }}
+              />
+            )}
+            <span className="sidebar-icon">{item.icon}</span>
+            <span className="sidebar-label">{item.label}</span>
+          </motion.div>
         ))}
       </nav>
     </aside>
