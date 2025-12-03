@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import Header from './components/Header'
 import Sidebar from './components/Sidebar'
@@ -14,16 +14,18 @@ import TeamMembers from './components/TeamMembers'
 import NewColleagues from './components/NewColleagues'
 import Documents from './components/Documents'
 import OnboardingRoadmap from './components/OnboardingRoadmap'
+import ExpandedBanner from './components/ExpandedBanner'
 import './App.css'
 
 function App() {
   const mainRef = useRef(null)
+  const [isBannerExpanded, setIsBannerExpanded] = useState(false)
 
   useEffect(() => {
-    // Simple fade-in animation on load - no ScrollTrigger dependency
+    // Simple fade-in animation on load
     const widgets = gsap.utils.toArray('.widget')
     
-    gsap.set(widgets, { opacity: 1, y: 0 }) // Ensure visible first
+    gsap.set(widgets, { opacity: 1, y: 0 })
     
     gsap.fromTo(widgets, 
       { opacity: 0, y: 30 },
@@ -74,12 +76,16 @@ function App() {
     <div className="app" ref={mainRef}>
       <Sidebar />
       <main className="main-content">
-        <Header />
+        <Header onExpandChange={setIsBannerExpanded} />
         
         <div className="dashboard-grid">
           {/* Top Row */}
           <div className="top-row">
-            <StockWidget />
+            {isBannerExpanded ? (
+              <ExpandedBanner onMouseLeave={() => setIsBannerExpanded(false)} />
+            ) : (
+              <StockWidget />
+            )}
             <KPIWidget />
             <HRWidget />
           </div>
