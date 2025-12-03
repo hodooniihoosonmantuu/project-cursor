@@ -270,7 +270,7 @@ body {
 
 /* Widget Base Styles */
 .widget {
-  background: var(--card-bg);
+  background: #FFD200;
   border-radius: var(--radius);
   padding: 18px;
   box-shadow: var(--shadow);
@@ -506,14 +506,14 @@ body {
 
 /* KPI Widget / Inflation Widget */
 .kpi-widget {
-  background: var(--card-bg);
+  background: #FFD200;
   position: relative;
 }
 
 .kpi-widget.inflation-widget {
   grid-column: span 2;
-  background: #0a0a0a;
-  color: white;
+  background: #FFD200;
+  color: var(--text-primary);
 }
 
 .kpi-widget.inflation-widget .widget-header,
@@ -655,7 +655,7 @@ body {
 
 /* HR Widget */
 .hr-widget {
-  background: var(--card-bg);
+  background: #FFD200;
   position: relative;
 }
 
@@ -742,7 +742,7 @@ body {
 
 /* Safety Widget */
 .safety-widget {
-  background: var(--card-bg);
+  background: #FFD200;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -790,7 +790,7 @@ body {
 
 /* Manhours Widget */
 .manhours-widget-card {
-  background: var(--card-bg);
+  background: #FFD200;
   position: relative;
   display: flex;
   flex-direction: column;
