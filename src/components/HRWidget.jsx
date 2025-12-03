@@ -55,14 +55,15 @@ function HRWidget() {
       <div className="hr-chart" ref={barsRef}>
         {employeeData.map((item, i) => (
           <div key={i} className="hr-bar-item">
-            <div className="hr-bar-percentage">{item.percentage}%</div>
             <div 
               className="hr-bar" 
               style={{ 
                 height: `${item.percentage * 2.2}%`,
                 background: item.color
               }}
-            />
+            >
+              <div className="hr-bar-percentage">{item.percentage}%</div>
+            </div>
             <div className="hr-bar-label">{item.type}</div>
           </div>
         ))}
