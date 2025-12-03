@@ -827,18 +827,16 @@ body {
   height: 100%;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.8;
 }
 
 .network-line {
   stroke: #90EE90;
-  stroke-width: 0.5;
-  filter: blur(0.4px);
+  stroke-width: 1;
   stroke-linecap: round;
 }
 
 .network-node {
-  filter: blur(0.3px);
   transform-origin: center;
   transition: opacity 0.3s ease;
 }
@@ -869,7 +867,6 @@ body {
   margin-bottom: 16px;
   text-align: center;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  animation: titlePulse 3s ease-in-out infinite;
   position: relative;
   z-index: 2;
 }
@@ -878,12 +875,10 @@ body {
   font-family: 'Space Mono', monospace;
   font-size: 52px;
   font-weight: 700;
-  color: #2ecc71;
+  color: #00A614;
   line-height: 1;
   text-align: center;
-  text-shadow: 0 0 10px rgba(46, 204, 113, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
-  animation: numberGlow 2s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4));
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   position: relative;
   z-index: 2;
 }
@@ -899,16 +894,6 @@ body {
   }
 }
 
-@keyframes numberGlow {
-  0%, 100% {
-    text-shadow: 0 0 10px rgba(46, 204, 113, 0.5), 0 2px 4px rgba(0, 0, 0, 0.2);
-    filter: drop-shadow(0 0 8px rgba(46, 204, 113, 0.4));
-  }
-  50% {
-    text-shadow: 0 0 20px rgba(46, 204, 113, 0.8), 0 2px 4px rgba(0, 0, 0, 0.2);
-    filter: drop-shadow(0 0 15px rgba(46, 204, 113, 0.7));
-  }
-}
 
 /* Weather Widget */
 .weather-widget {

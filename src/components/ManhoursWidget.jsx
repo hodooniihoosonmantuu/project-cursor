@@ -28,7 +28,7 @@ function ManhoursWidget() {
       const rect = widgetRef.current.getBoundingClientRect()
       const widgetWidth = rect.width || 300
       const widgetHeight = rect.height || 140
-      const nodeCount = 20
+      const nodeCount = 25
       const newNodes = []
       const newConnections = []
 
@@ -54,7 +54,7 @@ function ManhoursWidget() {
           id: i,
           x: x,
           y: y,
-          radius: Math.random() * 1.5 + 1
+          radius: Math.random() * 3 + 2.5 // Bigger nodes: 2.5-5.5px
         })
       }
 
@@ -68,17 +68,17 @@ function ManhoursWidget() {
           )
           
           // Connect nodes that are close enough (varying connection probability)
-          const maxDistance = 100
+          const maxDistance = 150 // Increased connection distance
           const connectionChance = 1 - (distance / maxDistance)
-          if (distance < maxDistance && Math.random() < connectionChance * 0.6) {
+          if (distance < maxDistance && Math.random() < connectionChance * 0.7) {
             newConnections.push({
               id: `${i}-${j}`,
               x1: node1.x,
               y1: node1.y,
               x2: node2.x,
               y2: node2.y,
-              opacity: 0.2 + Math.random() * 0.3,
-              strokeWidth: 0.3 + Math.random() * 0.4
+              opacity: 0.5 + Math.random() * 0.4, // More visible: 0.5-0.9
+              strokeWidth: 1 + Math.random() * 1.5 // Thicker lines: 1-2.5px
             })
           }
         }
@@ -164,7 +164,7 @@ function ManhoursWidget() {
             cy={node.y}
             r={node.radius}
             fill="#90EE90"
-            opacity="0.5"
+            opacity="0.7"
           />
         ))}
       </svg>
