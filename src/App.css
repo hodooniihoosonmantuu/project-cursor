@@ -317,8 +317,8 @@ body {
 
 /* Stock Widget */
 .stock-widget {
-  background: #0a0a0a;
-  color: white;
+  background: #FFD200;
+  color: var(--text-primary);
   position: relative;
   overflow: hidden;
 }
