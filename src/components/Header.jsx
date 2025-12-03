@@ -10,8 +10,8 @@ function Header() {
 
   useEffect(() => {
     gsap.fromTo(bannerRef.current,
-      { opacity: 0 },
-      { opacity: 1, duration: 0.6, ease: 'power2.out' }
+      { opacity: 0, y: -10 },
+      { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' }
     )
   }, [])
 
@@ -23,23 +23,39 @@ function Header() {
     setIsExpanded(true)
     const banner = bannerRef.current
 
-    // Simple, clean expand to half screen
+    // Subtle expand with smooth timing
     gsap.to(banner, {
-      height: '45vh',
-      duration: 0.4,
-      ease: 'power2.out'
+      height: '380px',
+      duration: 0.8,
+      ease: 'power2.inOut'
     })
 
-    // Clean crossfade
+    // Gentle blur out the before image
     gsap.to('.banner-before', {
       opacity: 0,
-      duration: 0.4,
-      ease: 'power2.out'
+      filter: 'blur(8px)',
+      scale: 1.02,
+      duration: 0.6,
+      ease: 'power2.inOut'
     })
 
-    gsap.to('.banner-after', {
+    // Smooth fade in the after image with subtle blur clear
+    gsap.fromTo('.banner-after', 
+      { filter: 'blur(12px)', scale: 1.05 },
+      {
+        opacity: 1,
+        filter: 'blur(0px)',
+        scale: 1,
+        duration: 0.8,
+        ease: 'power2.out'
+      }
+    )
+
+    // Water ripple overlay
+    gsap.to('.water-ripple', {
       opacity: 1,
-      duration: 0.5,
+      scale: 2.5,
+      duration: 1,
       ease: 'power2.out'
     })
   }
@@ -48,27 +64,42 @@ function Header() {
     timeoutRef.current = setTimeout(() => {
       const banner = bannerRef.current
 
-      // Clean collapse
+      // Fade out after with blur
       gsap.to('.banner-after', {
         opacity: 0,
-        duration: 0.3,
+        filter: 'blur(8px)',
+        scale: 1.02,
+        duration: 0.5,
         ease: 'power2.in'
       })
 
+      // Bring back before image smoothly
       gsap.to('.banner-before', {
         opacity: 1,
-        duration: 0.4,
+        filter: 'blur(0px)',
+        scale: 1,
+        duration: 0.6,
+        delay: 0.1,
         ease: 'power2.out'
       })
 
+      // Collapse banner
       gsap.to(banner, {
         height: '140px',
-        duration: 0.4,
-        delay: 0.1,
+        duration: 0.6,
+        delay: 0.15,
         ease: 'power2.inOut',
         onComplete: () => setIsExpanded(false)
       })
-    }, 100)
+
+      // Reset water ripple
+      gsap.to('.water-ripple', {
+        opacity: 0,
+        scale: 0,
+        duration: 0.4,
+        ease: 'power2.in'
+      })
+    }, 150)
   }
 
   return (
@@ -78,6 +109,9 @@ function Header() {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
+      {/* Water ripple effect */}
+      <div className="water-ripple"></div>
+
       {/* Before image - collapsed state */}
       <div className="banner-before">
         <img src={beforeImg} alt="Banner" />
