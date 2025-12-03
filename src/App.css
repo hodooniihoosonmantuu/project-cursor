@@ -313,9 +313,16 @@ body {
 }
 
 .stock-label {
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.8);
-  font-weight: 500;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.stock-subtitle {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 400;
 }
 
 .stock-price-info {
@@ -323,16 +330,22 @@ body {
 }
 
 .stock-price-current {
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 700;
   color: white;
   line-height: 1.2;
+  font-family: 'Space Mono', monospace;
+  letter-spacing: -0.5px;
 }
 
 .stock-price-change {
-  font-size: 12px;
-  font-weight: 500;
-  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 600;
+  margin-top: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
 }
 
 .stock-price-change.positive {
@@ -341,6 +354,13 @@ body {
 
 .stock-price-change.negative {
   color: #e74c3c;
+}
+
+.stock-loading {
+  padding: 40px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 14px;
 }
 
 
@@ -412,6 +432,58 @@ body {
     opacity: 1;
     transform: scale(1.1);
   }
+}
+
+.time-axis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-left: 50px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* Stock Info Footer */
+.stock-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.info-label {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: white;
+  font-family: 'Space Mono', monospace;
+}
+
+.info-value.positive {
+  color: #2ecc71;
+}
+
+.info-value.negative {
+  color: #e74c3c;
+}
+
+.price-indicator text {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
 
 /* KPI Widget */
