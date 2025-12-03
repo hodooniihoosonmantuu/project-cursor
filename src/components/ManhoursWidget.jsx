@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import gsap from 'gsap'
 
 function ManhoursWidget() {
   const widgetRef = useRef(null)
-  const svgRef = useRef(null)
-  const [nodes, setNodes] = useState([])
-  const [connections, setConnections] = useState([])
+  const canvasRef = useRef(null)
+  const particlesRef = useRef([])
+  const animationFrameRef = useRef(null)
 
   useEffect(() => {
     if (widgetRef.current) {
@@ -21,149 +21,117 @@ function ManhoursWidget() {
       )
     }
 
-    // Create network nodes and connections
-    const createNetwork = () => {
-      if (!widgetRef.current) return
-      
+    // Initialize particles
+    const initParticles = () => {
+      if (!canvasRef.current || !widgetRef.current) return
+
+      const canvas = canvasRef.current
       const rect = widgetRef.current.getBoundingClientRect()
-      const widgetWidth = rect.width || 300
-      const widgetHeight = rect.height || 140
-      const nodeCount = 18
-      const newNodes = []
-      const newConnections = []
+      canvas.width = rect.width
+      canvas.height = rect.height
 
-      // Create nodes (more concentrated in upper-left, dissipating to bottom-right)
-      // Better spacing for minimal look
-      for (let i = 0; i < nodeCount; i++) {
-        let x, y
-        const rand = Math.random()
-        if (rand < 0.45) {
-          // Concentrate in upper-left (45% of nodes)
-          x = Math.random() * (widgetWidth * 0.45) + 10
-          y = Math.random() * (widgetHeight * 0.45) + 10
-        } else if (rand < 0.75) {
-          // Middle area (30% of nodes)
-          x = Math.random() * (widgetWidth * 0.6) + widgetWidth * 0.2
-          y = Math.random() * (widgetHeight * 0.6) + widgetHeight * 0.2
-        } else {
-          // Spread out (25% of nodes)
-          x = Math.random() * (widgetWidth * 0.7) + widgetWidth * 0.15
-          y = Math.random() * (widgetHeight * 0.7) + widgetHeight * 0.15
-        }
-        
-        newNodes.push({
-          id: i,
-          x: x,
-          y: y,
-          radius: Math.random() * 1 + 1.2 // Smaller nodes: 1.2-2.2px
+      const ctx = canvas.getContext('2d')
+      const particleCount = 30
+      particlesRef.current = []
+
+      // Create particles
+      for (let i = 0; i < particleCount; i++) {
+        particlesRef.current.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height,
+          vx: (Math.random() - 0.5) * 0.5,
+          vy: (Math.random() - 0.5) * 0.5,
+          radius: Math.random() * 1.5 + 1,
+          opacity: Math.random() * 0.5 + 0.3
         })
       }
 
-      // Create connections between nearby nodes (more selective for minimal look)
-      for (let i = 0; i < newNodes.length; i++) {
-        for (let j = i + 1; j < newNodes.length; j++) {
-          const node1 = newNodes[i]
-          const node2 = newNodes[j]
-          const distance = Math.sqrt(
-            Math.pow(node2.x - node1.x, 2) + Math.pow(node2.y - node1.y, 2)
-          )
-          
-          // Connect nodes that are close enough (more selective connections)
-          const maxDistance = 100
-          const connectionChance = 1 - (distance / maxDistance)
-          // Reduced connection probability for cleaner look
-          if (distance < maxDistance && Math.random() < connectionChance * 0.4) {
-            newConnections.push({
-              id: `${i}-${j}`,
-              x1: node1.x,
-              y1: node1.y,
-              x2: node2.x,
-              y2: node2.y,
-              opacity: 0.3 + Math.random() * 0.3, // More subtle: 0.3-0.6
-              strokeWidth: 0.4 + Math.random() * 0.3 // Thinner lines: 0.4-0.7px
-            })
-          }
-        }
+      // Animation loop
+      const animate = () => {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+        // Update and draw particles
+        particlesRef.current.forEach((particle, i) => {
+          // Update position
+          particle.x += particle.vx
+          particle.y += particle.vy
+
+          // Bounce off edges
+          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
+          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+
+          // Keep particles in bounds
+          particle.x = Math.max(0, Math.min(canvas.width, particle.x))
+          particle.y = Math.max(0, Math.min(canvas.height, particle.y))
+
+          // Draw particle
+          ctx.beginPath()
+          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(0, 166, 20, ${particle.opacity})`
+          ctx.fill()
+
+          // Draw connections
+          particlesRef.current.slice(i + 1).forEach(otherParticle => {
+            const dx = otherParticle.x - particle.x
+            const dy = otherParticle.y - particle.y
+            const distance = Math.sqrt(dx * dx + dy * dy)
+
+            if (distance < 80) {
+              const opacity = (1 - distance / 80) * 0.2
+              ctx.beginPath()
+              ctx.moveTo(particle.x, particle.y)
+              ctx.lineTo(otherParticle.x, otherParticle.y)
+              ctx.strokeStyle = `rgba(0, 166, 20, ${opacity})`
+              ctx.lineWidth = 0.5
+              ctx.stroke()
+            }
+          })
+        })
+
+        animationFrameRef.current = requestAnimationFrame(animate)
       }
 
-      setNodes(newNodes)
-      setConnections(newConnections)
+      animate()
+
+      // Handle resize
+      const handleResize = () => {
+        if (!widgetRef.current) return
+        const rect = widgetRef.current.getBoundingClientRect()
+        canvas.width = rect.width
+        canvas.height = rect.height
+        
+        // Reposition particles
+        particlesRef.current.forEach(particle => {
+          particle.x = Math.min(particle.x, canvas.width)
+          particle.y = Math.min(particle.y, canvas.height)
+        })
+      }
+
+      window.addEventListener('resize', handleResize)
+
+      return () => {
+        if (animationFrameRef.current) {
+          cancelAnimationFrame(animationFrameRef.current)
+        }
+        window.removeEventListener('resize', handleResize)
+      }
     }
 
-    // Wait for widget to be rendered, then create network
-    setTimeout(createNetwork, 100)
+    const timer = setTimeout(initParticles, 100)
+    return () => {
+      clearTimeout(timer)
+      if (animationFrameRef.current) {
+        cancelAnimationFrame(animationFrameRef.current)
+      }
+    }
   }, [])
-
-  // Animate network after nodes are rendered
-  useEffect(() => {
-    if (nodes.length > 0 && svgRef.current) {
-      setTimeout(() => {
-        const lines = svgRef.current.querySelectorAll('.network-line')
-        const dots = svgRef.current.querySelectorAll('.network-node')
-        
-        // Animate lines with pulse effect
-        lines.forEach((line, i) => {
-          gsap.to(line, {
-            opacity: '+=0.2',
-            duration: 2 + Math.random() * 2,
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            delay: i * 0.1
-          })
-        })
-
-        // Animate nodes with subtle pulse
-        dots.forEach((dot, i) => {
-          gsap.to(dot, {
-            scale: 1.3,
-            duration: 1.5 + Math.random(),
-            repeat: -1,
-            yoyo: true,
-            ease: 'sine.inOut',
-            delay: i * 0.15
-          })
-        })
-      }, 50)
-    }
-  }, [nodes])
 
   return (
     <div className="widget manhours-widget-card" ref={widgetRef}>
-      <svg 
-        ref={svgRef}
-        className="network-svg"
-        width="100%"
-        height="100%"
-        preserveAspectRatio="none"
-      >
-        {/* Connections */}
-        {connections.map((conn) => (
-          <line
-            key={conn.id}
-            className="network-line"
-            x1={conn.x1}
-            y1={conn.y1}
-            x2={conn.x2}
-            y2={conn.y2}
-            stroke="#00A614"
-            strokeWidth={conn.strokeWidth || 0.5}
-            opacity={conn.opacity}
-          />
-        ))}
-        {/* Nodes */}
-        {nodes.map((node) => (
-          <circle
-            key={node.id}
-            className="network-node"
-            cx={node.x}
-            cy={node.y}
-            r={node.radius}
-            fill="#00A614"
-            opacity="0.6"
-          />
-        ))}
-      </svg>
+      <canvas 
+        ref={canvasRef}
+        className="particles-canvas"
+      />
       <div className="manhours-indicator">●</div>
       <div className="manhours-title">MANHOURS</div>
       <div className="manhours-value-large">1383942.80</div>
