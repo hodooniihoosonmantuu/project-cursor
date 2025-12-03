@@ -657,6 +657,19 @@ body {
 .hr-widget {
   background: #F8EDCC;
   position: relative;
+  color: #000000;
+}
+
+.hr-widget * {
+  color: #000000;
+}
+
+.hr-widget .widget-title,
+.hr-widget .hr-count-value,
+.hr-widget .hr-count-label,
+.hr-widget .hr-bar-label,
+.hr-widget .hr-bar-percentage {
+  color: #000000;
 }
 
 .hr-widget .widget-header {
@@ -748,6 +761,17 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 140px;
+  color: #000000;
+}
+
+.safety-widget * {
+  color: #000000;
+}
+
+.safety-widget .safety-location,
+.safety-widget .safety-days,
+.safety-widget .safety-label {
+  color: #000000;
 }
 
 .safety-indicator {
@@ -796,6 +820,16 @@ body {
   flex-direction: column;
   justify-content: center;
   min-height: 140px;
+  color: #000000;
+}
+
+.manhours-widget-card * {
+  color: #000000;
+}
+
+.manhours-widget-card .manhours-title,
+.manhours-widget-card .manhours-value-large {
+  color: #000000;
 }
 
 .manhours-title {

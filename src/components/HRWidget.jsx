@@ -36,9 +36,9 @@ function HRWidget() {
   }, [])
 
   const employeeData = [
-    { type: 'Permanent', percentage: 49, color: '#f5d98a' },
-    { type: 'Contract', percentage: 31, color: '#4a5568' },
-    { type: 'Probation', percentage: 19, color: '#a0aec0' }
+    { type: 'Уурхай', percentage: 49, color: '#f5d98a' },
+    { type: 'Улаанбаатар', percentage: 31, color: '#4a5568' },
+    { type: 'Улаанбулаг', percentage: 19, color: '#a0aec0' }
   ]
 
   return (
