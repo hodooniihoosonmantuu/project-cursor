@@ -102,13 +102,13 @@ function KPIWidget() {
 
   const barWidth = graphWidth / inflationData.length * 0.7
 
-  // Colors exactly matching the image - blue tones
+  // Colors - bright yellow that stands out on dark background
   const colors = {
-    max: '#e8f4f8',           // Lightest blue/grey (bottom)
-    gasoline: '#b3d9e6',      // Light blue
-    solidFuel: '#5fa8d3',    // Medium blue
-    imported: '#2980b9',      // Darker blue
-    domestic: '#1a4d80',     // Darkest blue (top)
+    max: '#FFD700',           // Bright gold/yellow (bottom)
+    gasoline: '#FFC107',      // Bright amber yellow
+    solidFuel: '#FFB300',     // Bright yellow-orange
+    imported: '#FFA000',      // Bright orange-yellow
+    domestic: '#FF8F00',     // Bright deep yellow (top)
     inflation: '#e74c3c'      // Red line
   }
 
@@ -116,7 +116,7 @@ function KPIWidget() {
     <div className="widget kpi-widget inflation-widget">
       <div className="widget-header">
         <span className="widget-title">
-          FIGURE 5. ULAANBAATAR CITY ANNUAL INFLATION COMPOSITION, BY MONTH
+          Улаанбаатар хотын жилийн инфляц, сараар
         </span>
       </div>
       
