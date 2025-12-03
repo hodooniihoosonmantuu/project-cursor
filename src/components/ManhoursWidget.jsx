@@ -34,15 +34,28 @@ function ManhoursWidget() {
       const particleCount = 30
       particlesRef.current = []
 
-      // Create particles
+      // Create particles with GSAP animation
       for (let i = 0; i < particleCount; i++) {
-        particlesRef.current.push({
+        const particle = {
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
-          radius: Math.random() * 1.5 + 1,
-          opacity: Math.random() * 0.5 + 0.3
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
+          radius: Math.random() * 1.2 + 1,
+          opacity: Math.random() * 0.4 + 0.4,
+          targetOpacity: Math.random() * 0.4 + 0.4
+        }
+        
+        particlesRef.current.push(particle)
+
+        // Animate opacity with GSAP
+        gsap.to(particle, {
+          targetOpacity: Math.random() * 0.4 + 0.4,
+          duration: 2 + Math.random() * 2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          delay: i * 0.1
         })
       }
 
@@ -52,36 +65,55 @@ function ManhoursWidget() {
 
         // Update and draw particles
         particlesRef.current.forEach((particle, i) => {
+          // Smooth opacity interpolation
+          particle.opacity += (particle.targetOpacity - particle.opacity) * 0.1
+
           // Update position
           particle.x += particle.vx
           particle.y += particle.vy
 
-          // Bounce off edges
-          if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-          if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
+          // Bounce off edges smoothly
+          if (particle.x < 0 || particle.x > canvas.width) {
+            particle.vx *= -1
+            particle.x = Math.max(0, Math.min(canvas.width, particle.x))
+          }
+          if (particle.y < 0 || particle.y > canvas.height) {
+            particle.vy *= -1
+            particle.y = Math.max(0, Math.min(canvas.height, particle.y))
+          }
 
-          // Keep particles in bounds
-          particle.x = Math.max(0, Math.min(canvas.width, particle.x))
-          particle.y = Math.max(0, Math.min(canvas.height, particle.y))
+          // Draw particle with gradient
+          const gradient = ctx.createRadialGradient(
+            particle.x, particle.y, 0,
+            particle.x, particle.y, particle.radius * 2
+          )
+          gradient.addColorStop(0, `rgba(0, 166, 20, ${particle.opacity})`)
+          gradient.addColorStop(1, `rgba(0, 166, 20, 0)`)
 
-          // Draw particle
           ctx.beginPath()
           ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(0, 166, 20, ${particle.opacity})`
+          ctx.fillStyle = gradient
           ctx.fill()
 
-          // Draw connections
+          // Draw connections with gradient
           particlesRef.current.slice(i + 1).forEach(otherParticle => {
             const dx = otherParticle.x - particle.x
             const dy = otherParticle.y - particle.y
             const distance = Math.sqrt(dx * dx + dy * dy)
 
-            if (distance < 80) {
-              const opacity = (1 - distance / 80) * 0.2
+            if (distance < 100) {
+              const opacity = (1 - distance / 100) * 0.15
+              const lineGradient = ctx.createLinearGradient(
+                particle.x, particle.y,
+                otherParticle.x, otherParticle.y
+              )
+              lineGradient.addColorStop(0, `rgba(0, 166, 20, ${opacity * particle.opacity})`)
+              lineGradient.addColorStop(1, `rgba(0, 166, 20, ${opacity * otherParticle.opacity})`)
+
               ctx.beginPath()
               ctx.moveTo(particle.x, particle.y)
               ctx.lineTo(otherParticle.x, otherParticle.y)
-              ctx.strokeStyle = `rgba(0, 166, 20, ${opacity})`
+              ctx.strokeStyle = lineGradient
               ctx.lineWidth = 0.5
               ctx.stroke()
             }
