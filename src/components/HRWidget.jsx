@@ -59,7 +59,7 @@ function HRWidget() {
             <div 
               className="hr-bar" 
               style={{ 
-                height: `${item.percentage * 1.2}%`,
+                height: `${item.percentage * 1.6}%`,
                 background: item.color
               }}
             />
