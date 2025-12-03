@@ -98,7 +98,6 @@ function App() {
           {/* Second Row */}
           <div className="second-row">
             <div className="left-column">
-              <WeatherWidget />
               <NewsSection title="Алтны тойм мэдээ" variant="gold" />
             </div>
             <div className="center-column">
@@ -107,8 +106,11 @@ function App() {
             </div>
           </div>
 
-          {/* Applications Row */}
-          <ApplicationsGrid />
+          {/* Applications & Weather Row */}
+          <div className="apps-weather-row">
+            <WeatherWidget />
+            <ApplicationsGrid />
+          </div>
 
           {/* Featured & Team Row */}
           <div className="featured-row">

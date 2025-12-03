@@ -1080,6 +1080,13 @@ body {
 }
 
 /* Applications Grid */
+.apps-weather-row {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 16px;
+  align-items: start;
+}
+
 .apps-section {
   background: linear-gradient(135deg, #2c3e50 0%, #1a252f 100%);
   border-radius: var(--radius);
