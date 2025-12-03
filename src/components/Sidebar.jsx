@@ -18,13 +18,20 @@ function Sidebar() {
   ]
 
   useEffect(() => {
-    gsap.from(sidebarRef.current.children, {
-      x: -30,
-      opacity: 0,
-      duration: 0.5,
-      stagger: 0.05,
-      ease: 'power2.out'
-    })
+    if (sidebarRef.current) {
+      const items = sidebarRef.current.querySelectorAll('.sidebar-item')
+      gsap.fromTo(items,
+        { x: -20, opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.3,
+          stagger: 0.05,
+          ease: 'power2.out',
+          delay: 0.2
+        }
+      )
+    }
   }, [])
 
   return (
@@ -47,4 +54,3 @@ function Sidebar() {
 }
 
 export default Sidebar
-

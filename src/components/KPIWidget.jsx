@@ -1,32 +1,37 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 
 function KPIWidget() {
-  const valueRef = useRef(null)
+  const [displayValue, setDisplayValue] = useState('70.32%')
   const chartRef = useRef(null)
 
   useEffect(() => {
-    // Animate the KPI value
-    gsap.from(valueRef.current, {
-      textContent: 0,
+    // Animate the KPI value counter
+    const obj = { value: 0 }
+    gsap.to(obj, {
+      value: 70.32,
       duration: 2,
       ease: 'power2.out',
-      snap: { textContent: 0.01 },
-      onUpdate: function() {
-        valueRef.current.textContent = parseFloat(this.targets()[0].textContent).toFixed(2) + '%'
+      delay: 0.5,
+      onUpdate: () => {
+        setDisplayValue(obj.value.toFixed(2) + '%')
       }
     })
 
     // Animate chart bars
     if (chartRef.current) {
-      gsap.from(chartRef.current.children, {
-        scaleY: 0,
-        transformOrigin: 'bottom',
-        duration: 0.6,
-        stagger: 0.05,
-        ease: 'power2.out',
-        delay: 0.3
-      })
+      const bars = chartRef.current.querySelectorAll('rect')
+      gsap.fromTo(bars, 
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          transformOrigin: 'bottom',
+          duration: 0.6,
+          stagger: 0.05,
+          ease: 'power2.out',
+          delay: 0.3
+        }
+      )
     }
   }, [])
 
@@ -37,7 +42,7 @@ function KPIWidget() {
       <div className="widget-header">
         <span className="widget-title">Average Team KPI</span>
       </div>
-      <div className="kpi-value" ref={valueRef}>70.32%</div>
+      <div className="kpi-value">{displayValue}</div>
       <div className="kpi-label">Performance Index</div>
       <div className="kpi-chart" ref={chartRef}>
         <svg width="100%" height="60" viewBox="0 0 200 60">
@@ -59,4 +64,3 @@ function KPIWidget() {
 }
 
 export default KPIWidget
-

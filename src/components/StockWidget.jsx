@@ -9,13 +9,15 @@ function StockWidget() {
       const path = chartRef.current.querySelector('.chart-line')
       if (path) {
         const length = path.getTotalLength()
-        gsap.set(path, { strokeDasharray: length, strokeDashoffset: length })
-        gsap.to(path, {
-          strokeDashoffset: 0,
-          duration: 2,
-          ease: 'power2.inOut',
-          delay: 0.5
-        })
+        gsap.fromTo(path, 
+          { strokeDasharray: length, strokeDashoffset: length },
+          {
+            strokeDashoffset: 0,
+            duration: 2,
+            ease: 'power2.inOut',
+            delay: 0.5
+          }
+        )
       }
     }
   }, [])
@@ -74,4 +76,3 @@ function StockWidget() {
 }
 
 export default StockWidget
-

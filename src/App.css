@@ -358,12 +358,24 @@ body {
   border-radius: var(--radius);
   padding: 20px;
   box-shadow: var(--shadow);
-  transition: all 0.3s ease;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  opacity: 1 !important; /* Ensure visibility */
 }
 
 .widget:hover {
   box-shadow: var(--shadow-hover);
   transform: translateY(-2px);
+}
+
+/* Ensure all content sections are visible */
+.news-section,
+.team-section,
+.colleagues-section,
+.documents-section,
+.onboarding-section,
+.apps-section,
+.featured-article {
+  opacity: 1;
 }
 
 .widget-header {

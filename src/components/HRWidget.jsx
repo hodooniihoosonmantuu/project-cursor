@@ -1,8 +1,8 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 
 function HRWidget() {
-  const valueRef = useRef(null)
+  const [employeeCount, setEmployeeCount] = useState(450)
   const barsRef = useRef(null)
 
   useEffect(() => {
@@ -10,25 +10,28 @@ function HRWidget() {
     const obj = { value: 0 }
     gsap.to(obj, {
       value: 450,
-      duration: 2,
+      duration: 1.5,
       ease: 'power2.out',
+      delay: 0.5,
       onUpdate: () => {
-        if (valueRef.current) {
-          valueRef.current.textContent = Math.round(obj.value)
-        }
+        setEmployeeCount(Math.round(obj.value))
       }
     })
 
     // Animate bars
     if (barsRef.current) {
-      gsap.from(barsRef.current.children, {
-        scaleY: 0,
-        transformOrigin: 'bottom',
-        duration: 0.5,
-        stagger: 0.02,
-        ease: 'power2.out',
-        delay: 0.5
-      })
+      const bars = barsRef.current.querySelectorAll('.hr-bar')
+      gsap.fromTo(bars,
+        { scaleY: 0 },
+        {
+          scaleY: 1,
+          transformOrigin: 'bottom',
+          duration: 0.4,
+          stagger: 0.03,
+          ease: 'power2.out',
+          delay: 0.6
+        }
+      )
     }
   }, [])
 
@@ -37,7 +40,7 @@ function HRWidget() {
   return (
     <div className="widget hr-widget">
       <div className="hr-title">Хүний нөөцийн хэлтэс</div>
-      <div className="hr-value" ref={valueRef}>0</div>
+      <div className="hr-value">{employeeCount}</div>
       <div className="hr-label">Active Employees</div>
       
       <div className="hr-chart" ref={barsRef}>
@@ -59,4 +62,3 @@ function HRWidget() {
 }
 
 export default HRWidget
-
