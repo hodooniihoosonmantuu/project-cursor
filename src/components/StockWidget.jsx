@@ -5,22 +5,43 @@ function StockWidget() {
   const chartRef = useRef(null)
 
   useEffect(() => {
-    // Animate chart elements
+    // Animate chart elements with realistic timing
     if (chartRef.current) {
-      gsap.fromTo('.candlestick, .trend-band, .signal-marker',
+      gsap.fromTo('.candlestick-group',
+        { opacity: 0, y: 10 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.6,
+          stagger: 0.08,
+          ease: 'power2.out',
+          delay: 0.5
+        }
+      )
+
+      gsap.fromTo('.trend-band',
         { opacity: 0 },
         {
           opacity: 1,
-          duration: 0.8,
-          stagger: 0.05,
-          ease: 'power2.out',
-          delay: 0.5
+          duration: 1,
+          ease: 'power1.out',
+          delay: 0.3
+        }
+      )
+
+      gsap.fromTo('.ma-line',
+        { strokeDasharray: 1000, strokeDashoffset: 1000 },
+        {
+          strokeDashoffset: 0,
+          duration: 2,
+          ease: 'power2.inOut',
+          delay: 0.8
         }
       )
     }
   }, [])
 
-  // Candlestick data with trend bands
+  // More realistic candlestick data
   const data = [
     // Initial upward trend (teal band)
     { o: 4200, h: 4250, l: 4180, c: 4230, isUp: true, band: 'teal', trend: 'up', ma: 4215 },
@@ -50,32 +71,35 @@ function StockWidget() {
   ]
 
   const priceRange = { min: 4150, max: 4450 }
-  const chartHeight = 180
-  const chartWidth = 500
+  const chartHeight = 200
+  const chartWidth = 550
 
   const scaleY = (value) => {
     return chartHeight - ((value - priceRange.min) / (priceRange.max - priceRange.min)) * chartHeight
   }
 
-  // Generate trend band paths
-  const generateTrendBand = (startIdx, endIdx, isUp) => {
-    if (startIdx === endIdx) return null
+  // Generate trend band paths with smoother curves
+  const generateTrendBand = (startIdx, endIdx) => {
+    if (startIdx >= endIdx) return null
     
     const points = data.slice(startIdx, endIdx + 1)
-    const upperPath = points.map((d, i) => {
+    const upperPoints = points.map((d, i) => {
       const x = ((startIdx + i) / data.length) * chartWidth
-      const y = scaleY(d.h)
-      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`
-    }).join(' ')
+      return { x, y: scaleY(Math.max(d.h, d.ma + (d.h - d.ma) * 0.3)) }
+    })
     
-    const lowerPath = points.map((d, i) => {
+    const lowerPoints = points.map((d, i) => {
       const x = ((startIdx + i) / data.length) * chartWidth
-      const y = scaleY(d.l)
-      return `${i === 0 ? 'M' : 'L'} ${x} ${y}`
-    }).reverse().map((point, i) => {
-      if (i === 0) return point.replace('M', 'L')
-      return point
-    }).join(' ')
+      return { x, y: scaleY(Math.min(d.l, d.ma - (d.ma - d.l) * 0.3)) }
+    }).reverse()
+
+    const upperPath = upperPoints.map((p, i) => 
+      i === 0 ? `M ${p.x} ${p.y}` : `L ${p.x} ${p.y}`
+    ).join(' ')
+    
+    const lowerPath = lowerPoints.map((p, i) => 
+      i === 0 ? `L ${p.x} ${p.y}` : `L ${p.x} ${p.y}`
+    ).join(' ')
 
     return `${upperPath} ${lowerPath} Z`
   }
@@ -120,7 +144,7 @@ function StockWidget() {
         <svg className="candlestick-chart" viewBox={`0 0 ${chartWidth} ${chartHeight}`} preserveAspectRatio="none">
           {/* Trend Bands */}
           {bandGroups.map((band, bandIdx) => {
-            const pathData = generateTrendBand(band.start, band.end, band.type === 'teal')
+            const pathData = generateTrendBand(band.start, band.end)
             if (!pathData) return null
             
             return (
@@ -128,9 +152,9 @@ function StockWidget() {
                 key={bandIdx}
                 className="trend-band"
                 d={pathData}
-                fill={band.type === 'teal' ? 'rgba(0, 200, 180, 0.2)' : 'rgba(231, 76, 60, 0.2)'}
-                stroke={band.type === 'teal' ? 'rgba(0, 200, 180, 0.3)' : 'rgba(231, 76, 60, 0.3)'}
-                strokeWidth="1"
+                fill={band.type === 'teal' ? 'rgba(0, 200, 180, 0.15)' : 'rgba(231, 76, 60, 0.15)'}
+                stroke={band.type === 'teal' ? 'rgba(0, 200, 180, 0.25)' : 'rgba(231, 76, 60, 0.25)'}
+                strokeWidth="0.5"
               />
             )
           })}
@@ -144,71 +168,94 @@ function StockWidget() {
               return `${x},${y}`
             }).join(' ')}
             fill="none"
-            stroke="rgba(200, 200, 200, 0.6)"
-            strokeWidth="2"
-          />
-
-          {/* Current price line */}
-          <line 
-            x1="0" 
-            y1={scaleY(currentPrice)} 
-            x2={chartWidth} 
-            y2={scaleY(currentPrice)} 
-            stroke="#e74c3c" 
-            strokeWidth="1" 
-            strokeDasharray="4 4"
-            opacity="0.5"
+            stroke="rgba(180, 180, 180, 0.7)"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
           
-          {/* Candlesticks */}
+          {/* Candlesticks - Realistic rendering */}
           {data.map((candle, i) => {
             const x = (i / data.length) * chartWidth
-            const w = (chartWidth / data.length) * 0.7
+            const centerX = x + (chartWidth / data.length) / 2
+            const candleWidth = (chartWidth / data.length) * 0.65
             const bodyTop = scaleY(Math.max(candle.o, candle.c))
             const bodyBottom = scaleY(Math.min(candle.o, candle.c))
-            const bodyHeight = Math.abs(bodyTop - bodyBottom) || 3
+            const bodyHeight = Math.max(Math.abs(bodyTop - bodyBottom), 2)
             const wickTop = scaleY(candle.h)
             const wickBottom = scaleY(candle.l)
-            const color = candle.isUp ? '#00c8b4' : '#e74c3c'
+            const isUp = candle.isUp
+            const upColor = '#00c8b4'
+            const downColor = '#e74c3c'
 
             return (
-              <g key={i} className="candlestick">
-                {/* Wick */}
+              <g key={i} className="candlestick-group">
+                {/* Upper wick (shadow) */}
                 <line 
-                  x1={x + w / 2} 
+                  x1={centerX} 
                   y1={wickTop} 
-                  x2={x + w / 2} 
-                  y2={wickBottom} 
-                  stroke={color} 
+                  x2={centerX} 
+                  y2={bodyTop} 
+                  stroke={isUp ? upColor : downColor}
                   strokeWidth="2"
+                  strokeLinecap="round"
                 />
-                {/* Body */}
+                
+                {/* Candlestick body */}
                 <rect 
-                  x={x} 
+                  x={centerX - candleWidth / 2} 
                   y={bodyTop} 
-                  width={w} 
+                  width={candleWidth} 
                   height={bodyHeight} 
-                  fill={color}
+                  fill={isUp ? upColor : downColor}
                   rx="1"
+                  className="candle-body"
+                />
+                
+                {/* Body outline for depth */}
+                <rect 
+                  x={centerX - candleWidth / 2} 
+                  y={bodyTop} 
+                  width={candleWidth} 
+                  height={bodyHeight} 
+                  fill="none"
+                  stroke={isUp ? 'rgba(0, 200, 180, 0.8)' : 'rgba(231, 76, 60, 0.8)'}
+                  strokeWidth="0.5"
+                  rx="1"
+                />
+
+                {/* Lower wick (shadow) */}
+                <line 
+                  x1={centerX} 
+                  y1={bodyBottom} 
+                  x2={centerX} 
+                  y2={wickBottom} 
+                  stroke={isUp ? upColor : downColor}
+                  strokeWidth="2"
+                  strokeLinecap="round"
                 />
 
                 {/* Buy Signal (Green Triangle) */}
                 {candle.signal === 'buy' && (
                   <polygon
-                    className="signal-marker"
-                    points={`${x + w / 2},${wickBottom + 8} ${x + w / 2 - 6},${wickBottom + 16} ${x + w / 2 + 6},${wickBottom + 16}`}
+                    className="signal-marker buy-signal"
+                    points={`${centerX},${wickBottom + 10} ${centerX - 7},${wickBottom + 20} ${centerX + 7},${wickBottom + 20}`}
                     fill="#2ecc71"
-                    opacity="0.9"
+                    stroke="#1e8449"
+                    strokeWidth="1"
+                    opacity="0.95"
                   />
                 )}
 
                 {/* Sell Signal (Red Heart) */}
                 {candle.signal === 'sell' && (
-                  <g className="signal-marker" transform={`translate(${x + w / 2}, ${wickTop - 8})`}>
+                  <g className="signal-marker sell-signal" transform={`translate(${centerX}, ${wickTop - 10})`}>
                     <path
-                      d="M0,0 C0,-4 -4,-6 -4,-8 C-4,-10 -2,-12 0,-12 C2,-12 4,-10 4,-8 C4,-6 0,-4 0,0 Z"
+                      d="M0,0 C-2,-3 -5,-5 -5,-7 C-5,-9 -3,-11 0,-11 C3,-11 5,-9 5,-7 C5,-5 2,-3 0,0 Z"
                       fill="#e74c3c"
-                      opacity="0.9"
+                      stroke="#c0392b"
+                      strokeWidth="0.5"
+                      opacity="0.95"
                     />
                   </g>
                 )}
