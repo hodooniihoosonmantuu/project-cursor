@@ -713,7 +713,7 @@ body {
 
 .hr-bar-percentage {
   position: absolute;
-  top: -20px;
+  top: -17px;
   width: 35px;
   height: 35px;
   background: rgba(255, 255, 255, 0.7);
@@ -726,9 +726,10 @@ body {
   justify-content: center;
   font-size: 11px;
   font-weight: 600;
-  color: #000000 !important;
+  color: #000000;
   z-index: 2;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transform: translateY(50%);
 }
 
 .hr-bar {
