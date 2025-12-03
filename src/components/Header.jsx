@@ -25,8 +25,8 @@ function Header() {
 
     // Simple, clean expand to half screen
     gsap.to(banner, {
-      height: '50vh',
-      duration: 0.5,
+      height: '45vh',
+      duration: 0.4,
       ease: 'power2.out'
     })
 
@@ -62,7 +62,7 @@ function Header() {
       })
 
       gsap.to(banner, {
-        height: '166px',
+        height: '140px',
         duration: 0.4,
         delay: 0.1,
         ease: 'power2.inOut',
