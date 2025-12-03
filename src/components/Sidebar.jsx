@@ -6,14 +6,14 @@ function Sidebar() {
   const [activeItem, setActiveItem] = useState(0)
 
   const menuItems = [
-    { label: 'Accueil' },
-    { label: 'Le Parc' },
-    { label: 'Actualités' },
-    { label: 'Documents' },
-    { label: 'Rapports' },
-    { label: 'Projets' },
-    { label: 'Équipe' },
-    { label: 'Paramètres' }
+    { label: 'Бидний тухай' },
+    { label: 'Үйл ажиллагаа' },
+    { label: 'Мэдээ, Мэдээлэл' },
+    { label: 'Нийгмийн хариуцлага' },
+    { label: 'Сургалт хөгжил' },
+    { label: 'Ажилтны жагсаалт' },
+    { label: 'Гарын авлага' },
+    { label: 'Тусламж' }
   ]
 
   return (
