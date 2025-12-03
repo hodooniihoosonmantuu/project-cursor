@@ -85,16 +85,14 @@ function App() {
             <KPIWidget />
           </div>
 
-          {/* Safety Row */}
+          {/* Safety Row - T-shaped layout */}
           <div className="safety-row">
             <HRWidget />
-            <SafetyWidget location="Boroo" days="158 Days" />
+            <div className="safety-middle">
+              <SafetyWidget location="Boroo" days="158 Days" />
+              <SafetyWidget location="Ulaanbulag" days="1795 Days" />
+            </div>
             <ManhoursWidget />
-          </div>
-          
-          {/* Ulaanbulag Safety Row */}
-          <div className="ulaanbulag-row">
-            <SafetyWidget location="Ulaanbulag" days="1795 Days" />
           </div>
 
           {/* Second Row */}

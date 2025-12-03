@@ -227,16 +227,20 @@ body {
 
 .safety-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1.5fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+}
+
+.safety-middle {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
 }
 
-.ulaanbulag-row {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  max-width: 400px;
-  margin: 0 auto;
+.safety-middle .widget {
+  flex: 1;
+  min-height: 0;
 }
 
 .second-row {
