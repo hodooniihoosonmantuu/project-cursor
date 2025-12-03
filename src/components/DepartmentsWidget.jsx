@@ -27,8 +27,9 @@ function DepartmentsWidget() {
     'Мэдээллийн аюулгүй байдлын хэлтэс'
   ]
 
-  const itemsPerPage = 4
-  const totalSlides = Math.ceil(departments.length / itemsPerPage)
+  const itemsVisible = 8 // Show 8 blocks at once
+  const itemsPerScroll = 4 // Scroll 4 blocks at a time
+  const totalSlides = Math.ceil((departments.length - itemsVisible) / itemsPerScroll) + 1
 
   useEffect(() => {
     if (linksRef.current) {
@@ -60,14 +61,21 @@ function DepartmentsWidget() {
   }
 
   const getCurrentDepartments = () => {
-    const start = currentSlide * itemsPerPage
-    return departments.slice(start, start + itemsPerPage)
+    const start = currentSlide * itemsPerScroll
+    const end = start + itemsVisible
+    // Handle wrapping for circular scroll
+    if (end > departments.length) {
+      return [
+        ...departments.slice(start),
+        ...departments.slice(0, end - departments.length)
+      ]
+    }
+    return departments.slice(start, end)
   }
 
-  // Color variants for alternating rows
+  // Color variants: top row yellow, bottom row green
   const getVariant = (index) => {
-    const globalIndex = currentSlide * itemsPerPage + index
-    return globalIndex % 2 === 0 ? 'yellow' : 'green'
+    return index < 4 ? 'yellow' : 'green'
   }
 
   return (
