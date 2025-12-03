@@ -503,6 +503,11 @@ body {
   background: #fefce8;
 }
 
+.kpi-widget.inflation-widget .widget-header,
+.kpi-widget.inflation-widget .inflation-legend {
+  background: transparent;
+}
+
 .kpi-widget .widget-header {
   margin-bottom: 10px;
 }
