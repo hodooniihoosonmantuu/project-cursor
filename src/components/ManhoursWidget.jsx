@@ -21,9 +21,10 @@ function ManhoursWidget() {
 
   return (
     <div className="widget manhours-widget-card" ref={widgetRef}>
-      <div className="safety-indicator">●</div>
+      <div className="manhours-indicator">●</div>
       <div className="manhours-title">MANHOURS</div>
       <div className="manhours-value-large">1383942.80</div>
+      <div className="widget-expand">↗</div>
     </div>
   )
 }
