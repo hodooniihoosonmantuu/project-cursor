@@ -748,7 +748,7 @@ body {
 .hr-bar-label {
   margin-top: 8px;
   font-size: 11px;
-  color: var(--text-secondary);
+  color: #000000 !important;
   text-align: center;
   font-weight: 500;
 }
@@ -792,7 +792,7 @@ body {
 .safety-location {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000 !important;
   margin-bottom: 8px;
 }
 
