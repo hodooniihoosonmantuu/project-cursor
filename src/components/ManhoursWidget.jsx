@@ -31,7 +31,7 @@ function ManhoursWidget() {
       canvas.height = rect.height
 
       const ctx = canvas.getContext('2d')
-      const nodeCount = 20
+      const nodeCount = 35
       particlesRef.current = []
 
       // Create network nodes (more concentrated in upper-left)
@@ -55,8 +55,8 @@ function ManhoursWidget() {
         const node = {
           x: x,
           y: y,
-          vx: (Math.random() - 0.5) * 0.2,
-          vy: (Math.random() - 0.5) * 0.2,
+          vx: (Math.random() - 0.5) * 1.2, // Faster movement: 0.6x speed
+          vy: (Math.random() - 0.5) * 1.2, // Faster movement: 0.6x speed
           radius: Math.random() * 1 + 1.5, // 1.5-2.5px nodes
           opacity: 0.6,
           targetOpacity: 0.6,
@@ -87,9 +87,9 @@ function ManhoursWidget() {
             const dy = otherNode.y - node.y
             const distance = Math.sqrt(dx * dx + dy * dy)
 
-            // Connect nearby nodes
-            if (distance < 90) {
-              const opacity = (1 - distance / 90) * 0.25
+            // Connect nearby nodes (increased distance for more connections)
+            if (distance < 120) {
+              const opacity = (1 - distance / 120) * 0.3
               ctx.beginPath()
               ctx.moveTo(node.x, node.y)
               ctx.lineTo(otherNode.x, otherNode.y)
@@ -102,9 +102,9 @@ function ManhoursWidget() {
 
         // Update and draw nodes
         particlesRef.current.forEach((node, i) => {
-          // Update position (very slow movement for network feel)
-          node.x += node.vx * 0.3
-          node.y += node.vy * 0.3
+          // Update position (faster movement)
+          node.x += node.vx
+          node.y += node.vy
 
           // Keep nodes in bounds
           if (node.x < 5 || node.x > canvas.width - 5) {
