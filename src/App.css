@@ -659,6 +659,12 @@ body {
   position: relative;
 }
 
+.hr-widget .widget-title,
+.hr-widget .hr-count-label,
+.hr-widget .hr-count-value {
+  color: #000000 !important;
+}
+
 .hr-widget .widget-header {
   margin-bottom: 12px;
 }
@@ -672,14 +678,14 @@ body {
   font-family: 'Space Mono', monospace;
   font-size: 32px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #000000 !important;
   display: block;
   line-height: 1;
 }
 
 .hr-count-label {
   font-size: 11px;
-  color: var(--text-secondary);
+  color: #000000 !important;
   text-transform: uppercase;
   margin-top: 4px;
   display: block;
