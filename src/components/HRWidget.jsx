@@ -36,9 +36,9 @@ function HRWidget() {
   }, [])
 
   const employeeData = [
-    { type: 'Уурхай', percentage: 49, color: '#FFD700' },      // Bright yellow
-    { type: 'Улаанбаатар', percentage: 31, color: '#2C2C2C' }, // Dark charcoal grey
-    { type: 'Улаанбулаг', percentage: 19, color: '#808080' }   // Medium grey
+    { type: 'Уурхай', percentage: 49, color: '#FFD700' },      // Yellow - largest portion
+    { type: 'Улаанбаатар', percentage: 31, color: '#000000' }, // Black - middle portion
+    { type: 'Улаанбулаг', percentage: 19, color: '#C0C0C0' }   // Silver - smallest portion
   ]
 
   return (
