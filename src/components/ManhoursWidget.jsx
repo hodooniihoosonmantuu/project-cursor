@@ -31,26 +31,43 @@ function ManhoursWidget() {
       canvas.height = rect.height
 
       const ctx = canvas.getContext('2d')
-      const particleCount = 30
+      const nodeCount = 20
       particlesRef.current = []
 
-      // Create particles with GSAP animation
-      for (let i = 0; i < particleCount; i++) {
-        const particle = {
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.3,
-          vy: (Math.random() - 0.5) * 0.3,
-          radius: Math.random() * 1.2 + 1,
-          opacity: Math.random() * 0.4 + 0.4,
-          targetOpacity: Math.random() * 0.4 + 0.4
+      // Create network nodes (more concentrated in upper-left)
+      for (let i = 0; i < nodeCount; i++) {
+        let x, y
+        const rand = Math.random()
+        if (rand < 0.5) {
+          // Concentrate in upper-left (50% of nodes)
+          x = Math.random() * (canvas.width * 0.5) + 10
+          y = Math.random() * (canvas.height * 0.5) + 10
+        } else if (rand < 0.8) {
+          // Middle area (30% of nodes)
+          x = Math.random() * (canvas.width * 0.6) + canvas.width * 0.2
+          y = Math.random() * (canvas.height * 0.6) + canvas.height * 0.2
+        } else {
+          // Spread out (20% of nodes)
+          x = Math.random() * (canvas.width * 0.7) + canvas.width * 0.15
+          y = Math.random() * (canvas.height * 0.7) + canvas.height * 0.15
+        }
+
+        const node = {
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
+          radius: Math.random() * 1 + 1.5, // 1.5-2.5px nodes
+          opacity: 0.6,
+          targetOpacity: 0.6,
+          pulseScale: 1
         }
         
-        particlesRef.current.push(particle)
+        particlesRef.current.push(node)
 
-        // Animate opacity with GSAP
-        gsap.to(particle, {
-          targetOpacity: Math.random() * 0.4 + 0.4,
+        // Animate pulse with GSAP
+        gsap.to(node, {
+          pulseScale: 1.3,
           duration: 2 + Math.random() * 2,
           repeat: -1,
           yoyo: true,
@@ -63,61 +80,55 @@ function ManhoursWidget() {
       const animate = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height)
 
-        // Update and draw particles
-        particlesRef.current.forEach((particle, i) => {
-          // Smooth opacity interpolation
-          particle.opacity += (particle.targetOpacity - particle.opacity) * 0.1
-
-          // Update position
-          particle.x += particle.vx
-          particle.y += particle.vy
-
-          // Bounce off edges smoothly
-          if (particle.x < 0 || particle.x > canvas.width) {
-            particle.vx *= -1
-            particle.x = Math.max(0, Math.min(canvas.width, particle.x))
-          }
-          if (particle.y < 0 || particle.y > canvas.height) {
-            particle.vy *= -1
-            particle.y = Math.max(0, Math.min(canvas.height, particle.y))
-          }
-
-          // Draw particle with gradient
-          const gradient = ctx.createRadialGradient(
-            particle.x, particle.y, 0,
-            particle.x, particle.y, particle.radius * 2
-          )
-          gradient.addColorStop(0, `rgba(0, 166, 20, ${particle.opacity})`)
-          gradient.addColorStop(1, `rgba(0, 166, 20, 0)`)
-
-          ctx.beginPath()
-          ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2)
-          ctx.fillStyle = gradient
-          ctx.fill()
-
-          // Draw connections with gradient
-          particlesRef.current.slice(i + 1).forEach(otherParticle => {
-            const dx = otherParticle.x - particle.x
-            const dy = otherParticle.y - particle.y
+        // Draw connections first (behind nodes)
+        particlesRef.current.forEach((node, i) => {
+          particlesRef.current.slice(i + 1).forEach(otherNode => {
+            const dx = otherNode.x - node.x
+            const dy = otherNode.y - node.y
             const distance = Math.sqrt(dx * dx + dy * dy)
 
-            if (distance < 100) {
-              const opacity = (1 - distance / 100) * 0.15
-              const lineGradient = ctx.createLinearGradient(
-                particle.x, particle.y,
-                otherParticle.x, otherParticle.y
-              )
-              lineGradient.addColorStop(0, `rgba(0, 166, 20, ${opacity * particle.opacity})`)
-              lineGradient.addColorStop(1, `rgba(0, 166, 20, ${opacity * otherParticle.opacity})`)
-
+            // Connect nearby nodes
+            if (distance < 90) {
+              const opacity = (1 - distance / 90) * 0.25
               ctx.beginPath()
-              ctx.moveTo(particle.x, particle.y)
-              ctx.lineTo(otherParticle.x, otherParticle.y)
-              ctx.strokeStyle = lineGradient
+              ctx.moveTo(node.x, node.y)
+              ctx.lineTo(otherNode.x, otherNode.y)
+              ctx.strokeStyle = `rgba(0, 166, 20, ${opacity})`
               ctx.lineWidth = 0.5
               ctx.stroke()
             }
           })
+        })
+
+        // Update and draw nodes
+        particlesRef.current.forEach((node, i) => {
+          // Update position (very slow movement for network feel)
+          node.x += node.vx * 0.3
+          node.y += node.vy * 0.3
+
+          // Keep nodes in bounds
+          if (node.x < 5 || node.x > canvas.width - 5) {
+            node.vx *= -1
+            node.x = Math.max(5, Math.min(canvas.width - 5, node.x))
+          }
+          if (node.y < 5 || node.y > canvas.height - 5) {
+            node.vy *= -1
+            node.y = Math.max(5, Math.min(canvas.height - 5, node.y))
+          }
+
+          // Draw node as solid circle (network node style)
+          ctx.beginPath()
+          ctx.arc(node.x, node.y, node.radius * node.pulseScale, 0, Math.PI * 2)
+          ctx.fillStyle = `rgba(0, 166, 20, ${node.opacity})`
+          ctx.fill()
+          
+          // Optional: Add subtle glow
+          ctx.shadowBlur = 3
+          ctx.shadowColor = 'rgba(0, 166, 20, 0.3)'
+          ctx.beginPath()
+          ctx.arc(node.x, node.y, node.radius * node.pulseScale, 0, Math.PI * 2)
+          ctx.fill()
+          ctx.shadowBlur = 0
         })
 
         animationFrameRef.current = requestAnimationFrame(animate)
