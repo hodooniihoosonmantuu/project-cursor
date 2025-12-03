@@ -26,7 +26,7 @@ function Header() {
       onMouseEnter={() => setIsExpanded(true)}
       onMouseLeave={() => setIsExpanded(false)}
     >
-      {/* Before image */}
+      {/* Before image with blurred background */}
       <motion.div 
         className="banner-before"
         animate={{ 
@@ -37,10 +37,15 @@ function Header() {
           ease: "easeInOut"
         }}
       >
-        <img src={beforeImg} alt="Banner" />
+        {/* Blurred background layer */}
+        <div className="banner-blur-bg">
+          <img src={beforeImg} alt="" aria-hidden="true" />
+        </div>
+        {/* Main image */}
+        <img src={beforeImg} alt="Banner" className="banner-main-img" />
       </motion.div>
 
-      {/* After image */}
+      {/* After image with blurred background */}
       <motion.div 
         className="banner-after"
         animate={{ 
@@ -51,7 +56,12 @@ function Header() {
           ease: "easeInOut"
         }}
       >
-        <img src={afterImg} alt="Banner expanded" />
+        {/* Blurred background layer */}
+        <div className="banner-blur-bg">
+          <img src={afterImg} alt="" aria-hidden="true" />
+        </div>
+        {/* Main image */}
+        <img src={afterImg} alt="Banner expanded" className="banner-main-img" />
       </motion.div>
     </motion.header>
   )
