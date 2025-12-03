@@ -655,7 +655,7 @@ body {
 
 /* HR Widget */
 .hr-widget {
-  background: #FFD200;
+  background: #F8EDCC;
   position: relative;
 }
 
@@ -742,7 +742,7 @@ body {
 
 /* Safety Widget */
 .safety-widget {
-  background: #FFD200;
+  background: #F8EDCC;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -790,7 +790,7 @@ body {
 
 /* Manhours Widget */
 .manhours-widget-card {
-  background: #FFD200;
+  background: #F8EDCC;
   position: relative;
   display: flex;
   flex-direction: column;

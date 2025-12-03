@@ -44,12 +44,12 @@ function HRWidget() {
   return (
     <div className="widget hr-widget">
       <div className="widget-header">
-        <span className="widget-title">OHS Daily Safety Flash</span>
+        <span className="widget-title">Хүний нөөцийн хэлтэс</span>
         <span className="widget-expand">↗</span>
       </div>
       <div className="hr-employee-count">
         <span className="hr-count-value">{employeeCount}</span>
-        <span className="hr-count-label">Active Employee</span>
+        <span className="hr-count-label">Нийт ажилчдын тоо</span>
       </div>
       
       <div className="hr-chart" ref={barsRef}>
