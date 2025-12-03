@@ -40,19 +40,19 @@ function Header() {
       ease: 'power4.out'
     })
 
-    // Fade transition between images
+    // Hide before image
     gsap.to('.banner-before', {
       opacity: 0,
-      scale: 1.05,
-      duration: 0.6,
+      duration: 0.4,
       ease: 'power2.out'
     })
 
+    // Show after image
     gsap.to('.banner-after', {
       opacity: 1,
       scale: 1,
-      duration: 0.8,
-      delay: 0.1,
+      duration: 0.6,
+      delay: 0.2,
       ease: 'power2.out'
     })
 
@@ -68,7 +68,6 @@ function Header() {
   const handleMouseLeave = () => {
     // Small delay before collapsing
     timeoutRef.current = setTimeout(() => {
-      setIsExpanded(false)
       const banner = bannerRef.current
 
       // Water effect on collapse
@@ -78,28 +77,30 @@ function Header() {
         ease: 'power2.in'
       })
 
+      // Hide after image first
+      gsap.to('.banner-after', {
+        opacity: 0,
+        duration: 0.3,
+        ease: 'power2.in',
+        onComplete: () => {
+          setIsExpanded(false)
+        }
+      })
+
+      // Show before image
+      gsap.to('.banner-before', {
+        opacity: 1,
+        duration: 0.4,
+        delay: 0.1,
+        ease: 'power2.out'
+      })
+
       // Collapse banner
       gsap.to(banner, {
         height: '166px',
-        duration: 0.6,
-        delay: 0.1,
-        ease: 'power3.inOut'
-      })
-
-      // Fade back to before image
-      gsap.to('.banner-after', {
-        opacity: 0,
-        scale: 1.02,
-        duration: 0.4,
-        ease: 'power2.in'
-      })
-
-      gsap.to('.banner-before', {
-        opacity: 1,
-        scale: 1,
         duration: 0.5,
         delay: 0.2,
-        ease: 'power2.out'
+        ease: 'power3.inOut'
       })
 
       // Reset water waves
@@ -108,7 +109,7 @@ function Header() {
         duration: 0.6,
         ease: 'power2.in'
       })
-    }, 100)
+    }, 150)
   }
 
   return (
