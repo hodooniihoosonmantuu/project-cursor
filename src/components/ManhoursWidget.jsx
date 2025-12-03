@@ -88,40 +88,42 @@ function ManhoursWidget() {
       setConnections(newConnections)
     }
 
-    // Wait for widget to be rendered
-    setTimeout(createNetwork, 100)
-
-    createNetwork()
-
-    // Animate network
-    if (svgRef.current) {
-      const lines = svgRef.current.querySelectorAll('.network-line')
-      const dots = svgRef.current.querySelectorAll('.network-node')
+    // Wait for widget to be rendered, then create network and animate
+    setTimeout(() => {
+      createNetwork()
       
-      // Animate lines with pulse effect
-      lines.forEach((line, i) => {
-        gsap.to(line, {
-          opacity: '+=0.2',
-          duration: 2 + Math.random() * 2,
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-          delay: i * 0.1
-        })
-      })
+      // Animate network after nodes are created
+      setTimeout(() => {
+        if (svgRef.current) {
+          const lines = svgRef.current.querySelectorAll('.network-line')
+          const dots = svgRef.current.querySelectorAll('.network-node')
+          
+          // Animate lines with pulse effect
+          lines.forEach((line, i) => {
+            gsap.to(line, {
+              opacity: '+=0.2',
+              duration: 2 + Math.random() * 2,
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+              delay: i * 0.1
+            })
+          })
 
-      // Animate nodes with subtle pulse
-      dots.forEach((dot, i) => {
-        gsap.to(dot, {
-          scale: 1.3,
-          duration: 1.5 + Math.random(),
-          repeat: -1,
-          yoyo: true,
-          ease: 'sine.inOut',
-          delay: i * 0.15
-        })
-      })
-    }
+          // Animate nodes with subtle pulse
+          dots.forEach((dot, i) => {
+            gsap.to(dot, {
+              scale: 1.3,
+              duration: 1.5 + Math.random(),
+              repeat: -1,
+              yoyo: true,
+              ease: 'sine.inOut',
+              delay: i * 0.15
+            })
+          })
+        }
+      }, 50)
+    }, 100)
   }, [])
 
   return (
