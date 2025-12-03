@@ -83,13 +83,17 @@ function App() {
           <div className="top-row">
             <StockWidget />
             <KPIWidget />
-            <HRWidget />
           </div>
 
           {/* Safety Row */}
           <div className="safety-row">
+            <HRWidget />
             <SafetyWidget location="Boroo" days="158 Days" />
             <ManhoursWidget />
+          </div>
+          
+          {/* Ulaanbulag Safety Row */}
+          <div className="ulaanbulag-row">
             <SafetyWidget location="Ulaanbulag" days="1795 Days" />
           </div>
 
