@@ -89,8 +89,8 @@ function App() {
           <div className="safety-row">
             <HRWidget />
             <div className="safety-middle">
-              <SafetyWidget location="Boroo" days="158 Days" />
-              <SafetyWidget location="Ulaanbulag" days="1795 Days" />
+              <SafetyWidget location="БОРОО" days="158 Days" />
+              <SafetyWidget location="УЛААНБУЛАГ" days="1795 Days" />
             </div>
             <ManhoursWidget />
           </div>

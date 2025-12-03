@@ -786,14 +786,14 @@ body {
 .safety-location {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text-primary);
+  color: #000000 !important;
   margin-bottom: 8px;
 }
 
 .safety-days {
   font-size: 36px;
   font-weight: 700;
-  color: var(--text-primary);
+  color: #000000 !important;
   line-height: 1;
   margin-bottom: 8px;
   font-family: 'Space Mono', monospace;
@@ -801,7 +801,7 @@ body {
 
 .safety-label {
   font-size: 11px;
-  color: #e74c3c;
+  color: #000000 !important;
   line-height: 1.4;
   font-weight: 500;
 }
