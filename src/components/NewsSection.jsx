@@ -22,30 +22,19 @@ function NewsSection({ title, variant }) {
   }, [])
 
   const newsItems = variant === 'gold' ? [
-    { day: '15', month: 'SEP', title: 'Rendez-vous du Parc : La Roche merveilleuse !', desc: 'Mongolian National Park' },
-    { day: '23', month: 'OCT', title: 'Village de Noël à la Place des Palmiers !', desc: 'Annual celebration event' },
-    { day: '15', month: 'NOV', title: 'Rendez-vous du Parc : La Roche merveilleuse !', desc: 'Mongolian National Park' }
+    { day: '3', month: 'DEC', title: 'Алтны зах зээлийн тойм 2025', desc: 'Бороо Гоулд Компани #19' },
+    { day: '23', month: 'NOV', title: 'Алтны зах зээлийн тойм 2025', desc: 'Бороо Гоулд Компани #18' },
+    { day: '15', month: 'OCT', title: 'Алтны зах зээлийн тойм 2025', desc: 'Бороо Гоулд Компани #17' }
   ] : [
-    { day: '01', month: 'DEC', title: 'Parc national de Forêts : Le 11ème parc national français voit le jour !', desc: 'Safety announcement' },
-    { day: '08', month: 'DEC', title: 'Actions de désinstallation à la Roche Ecrite', desc: 'Quarterly safety review' },
-    { day: '15', month: 'DEC', title: 'Demi-conférence des camps de braconniers dans l\'Etat de l\'île', desc: 'Environmental update' }
+    { day: '01', month: 'DEC', title: 'Аюулгүй ажиллагааны сэрэмжлүүлэг 2025', desc: 'Нийтлэл: 46' },
+    { day: '13', month: 'NOV', title: 'Аюулгүй ажиллагааны сэрэмжлүүлэг 2025', desc: 'Нийтлэл: 45' },
+    { day: '02', month: 'OCT', title: 'Аюулгүй ажиллагааны сэрэмжлүүлэг 2025', desc: 'Нийтлэл: 44' }
   ]
 
   return (
     <div className="news-section" ref={sectionRef}>
       <div className="news-header">
         <h3 className="news-title">{title}</h3>
-        {variant === 'safety' && (
-          <span style={{ 
-            background: '#d4a84b', 
-            padding: '4px 10px', 
-            borderRadius: '15px', 
-            fontSize: '10px',
-            fontWeight: '600'
-          }}>
-            ✨ Applications
-          </span>
-        )}
       </div>
       <div className="news-list">
         {newsItems.map((item, index) => (
@@ -62,7 +51,7 @@ function NewsSection({ title, variant }) {
         ))}
       </div>
       <div className="news-more">
-        <span>Tous les événements</span>
+        <span>Дэлгэрэнгүй</span>
         <span>→</span>
       </div>
     </div>

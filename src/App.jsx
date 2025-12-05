@@ -8,14 +8,22 @@ import HRWidget from './components/HRWidget'
 import SafetyWidget from './components/SafetyWidget'
 import ManhoursWidget from './components/ManhoursWidget'
 import WeatherWidget from './components/WeatherWidget'
+import WeatherPlusWidget from './components/WeatherPlusWidget'
+import WeatherLastWidget from './components/WeatherLastWidget'
 import DepartmentsWidget from './components/DepartmentsWidget'
 import NewsSection from './components/NewsSection'
 import ApplicationsGrid from './components/ApplicationsGrid'
-import FeaturedArticle from './components/FeaturedArticle'
+import FAQWidget from './components/FAQWidget'
+import SearchWidget1 from './components/SearchWidget1'
+import ITHelpdeskWidget from './components/ITHelpdeskWidget'
+import NewsWidget1 from './components/NewsWidget1'
+import NewsWidget2 from './components/NewsWidget2'
 import TeamMembers from './components/TeamMembers'
-import NewColleagues from './components/NewColleagues'
+import HowIWork from './components/HowIWork'
 import Documents from './components/Documents'
-import OnboardingRoadmap from './components/OnboardingRoadmap'
+import OnboardingWidget from './components/OnboardingWidget'
+import CalendarWidget from './components/CalendarWidget'
+import Footer from './components/Footer'
 import './App.css'
 
 function App() {
@@ -95,46 +103,61 @@ function App() {
             <ManhoursWidget />
           </div>
 
+          {/* Departments Row */}
+          <div className="departments-row">
+            <DepartmentsWidget />
+          </div>
+
           {/* Second Row */}
           <div className="second-row">
             <div className="left-column">
-              <NewsSection title="Алтны тойм мэдээ" variant="gold" />
+              <NewsSection title="Алтны зах зээлийн тойм" variant="gold" />
             </div>
             <div className="center-column">
-              <DepartmentsWidget />
               <NewsSection title="Аюулгүй ажиллагааны сэрэмжлүүлэг" variant="safety" />
             </div>
           </div>
 
           {/* Applications & Weather Row */}
           <div className="apps-weather-row">
-            <WeatherWidget />
-            <ApplicationsGrid />
+            <div className="weather-column">
+              <WeatherWidget />
+              <WeatherPlusWidget />
+              <WeatherLastWidget />
+            </div>
+            <div className="apps-faq-column">
+              <ApplicationsGrid />
+              <FAQWidget />
+              <div className="search-widgets-row">
+                <SearchWidget1 />
+                <ITHelpdeskWidget />
+              </div>
+            </div>
           </div>
 
-          {/* Featured & Team Row */}
-          <div className="featured-row">
-            <FeaturedArticle />
-            <TeamMembers />
+          {/* News Widgets */}
+          <div className="news-widgets-row">
+            <NewsWidget1 />
+            <NewsWidget2 />
           </div>
+          
+          {/* Team Members */}
+          <TeamMembers />
 
           {/* New Colleagues & Documents Row */}
           <div className="colleagues-row">
-            <NewColleagues />
+            <HowIWork />
             <Documents />
           </div>
 
-          {/* Onboarding Section */}
-          <OnboardingRoadmap />
+          {/* Onboarding & Calendar Row */}
+          <div className="onboarding-calendar-row">
+            <OnboardingWidget />
+            <CalendarWidget />
+          </div>
         </div>
 
-        <footer className="footer">
-          <div className="search-bar">
-            <span className="search-icon">🔍</span>
-            <input type="text" placeholder="Хайлт хийх ..." />
-          </div>
-          <p className="footer-text">Танд туслах хэрэгтэй бол helpdesk@boroogold.mn хаяг руу email бичээрэй!</p>
-        </footer>
+        <Footer />
       </main>
     </div>
   )
