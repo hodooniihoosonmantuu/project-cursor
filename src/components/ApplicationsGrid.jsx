@@ -22,12 +22,13 @@ function ApplicationsGrid() {
   }, [])
 
   const apps = [
-    { name: 'EdApp', icon: 'ADP', variant: 'adp', label: 'Training' },
-    { name: 'Elque 2', icon: 'E2', variant: 'elque', label: 'Portal' },
-    { name: 'Тоглоо тайлб', icon: 'W', variant: 'word', label: 'Documents' },
-    { name: 'IT Helpdesk', icon: 'IT', variant: 'it', label: 'Support' },
-    { name: 'Project Mgmt', icon: 'C', variant: 'concur', label: 'Projects' },
-    { name: 'Vantage ERP', icon: '✉️', variant: 'mail', label: 'Email' }
+    { name: 'EdApp', icon: 'EA', variant: 'edapp' },
+    { name: 'Ellipse 9', icon: 'E9', variant: 'ellipse' },
+    { name: 'Дотоод веб сайт', icon: 'WB', variant: 'website' },
+    { name: 'Veritech ERP', icon: 'VE', variant: 'veritech' },
+    { name: 'Project Management', icon: 'PM', variant: 'project' },
+    { name: 'Oracle UAT', icon: 'OU', variant: 'oracle' },
+    { name: 'IT Helpdesk Support System', icon: 'IT', variant: 'helpdesk' }
   ]
 
   return (

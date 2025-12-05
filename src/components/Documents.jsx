@@ -1,28 +1,41 @@
 function Documents() {
   const documents = [
-    { name: 'Request Form', icon: '📝', variant: 'request' },
-    { name: 'Applications', icon: '📱', variant: 'apps' },
-    { name: 'Templates', icon: '📄', variant: 'templates' },
-    { name: 'Projects', icon: '📊', variant: 'projects' },
-    { name: 'Employee Handbook', icon: '📚', variant: 'handbook' },
-    { name: 'Marketing Collateral', icon: '📈', variant: 'marketing' }
+    {
+      number: '01',
+      title: 'Гарын авлага',
+      description: 'Ажлын явцад шаардлагатай мэдээлэл, зааварчилгаа, удирдамжийг нэгтгэн тайлбарласан баримт бичиг.',
+      color: 'orange'
+    },
+    {
+      number: '02',
+      title: 'Журам',
+      description: 'Байгууллагад мөрдөх дүрэм, зохицуулалт болон ажил хэрхэн явагдах дарааллыг тодорхойлсон баримт бичиг.',
+      color: 'blue'
+    },
+    {
+      number: '03',
+      title: 'Маягт',
+      description: 'Ажлын тэмдэглэл, мэдээлэл бөглөж өгөхөд ашиглагддаг стандарт маягтууд',
+      color: 'green'
+    },
+    {
+      number: '04',
+      title: 'Форм',
+      description: 'Хүсэлт, мэдээлэл бөглөх, хяналт хийх зориулалттай бүх төрлийн форм, загварууд',
+      color: 'purple'
+    }
   ]
 
   return (
     <div className="documents-section widget">
-      <h2 className="documents-header">Documents</h2>
-      <input 
-        type="text" 
-        className="documents-search" 
-        placeholder="Search Forms & Templates"
-      />
-      <div className="documents-grid">
+      <h2 className="documents-header">Хэрэгцээт баримт бичгүүд</h2>
+      <div className="documents-flow">
         {documents.map((doc, index) => (
-          <div key={index} className="doc-item">
-            <div className={`doc-icon ${doc.variant}`}>
-              {doc.icon}
-            </div>
-            <span className="doc-name">{doc.name}</span>
+          <div key={index} className={`doc-card doc-${doc.color}`}>
+            <div className="doc-pushpin"></div>
+            <div className="doc-number">{doc.number}</div>
+            <h3 className="doc-title">{doc.title}</h3>
+            <p className="doc-description">{doc.description}</p>
           </div>
         ))}
       </div>
